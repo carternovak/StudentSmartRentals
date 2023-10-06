@@ -16,8 +16,14 @@ const Login = () => {
     e.preventDefault();
     setError("");
     try {
-      await logIn(email, password);
-      navigate("/home");
+      const userCredential = await logIn(email, password);
+      if (userCredential.user.emailVerified) {
+        navigate("/phonesignup");
+      } else {
+        alert(
+          "Need to verify the email before logging in. Kindly Verify link in the email!"
+        );
+      }
     } catch (err) {
       setError(err.message);
     }
@@ -27,7 +33,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await googleSignIn();
-      navigate("/home");
+      navigate("/phonesignup");
     } catch (error) {
       console.log(error.message);
     }
@@ -72,6 +78,9 @@ const Login = () => {
       </div>
       <div className="p-4 box mt-3 text-center">
         Don't have an account? <Link to="/signup">Sign up</Link>
+      </div>
+      <div className="p-4 box mt-3 text-center">
+        Forgot Password? <Link to="/passwordreset">Reset Password</Link>
       </div>
     </>
   );
