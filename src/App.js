@@ -10,7 +10,7 @@ import PhoneSignUp from "./Components/PhoneSignUp";
 import PasswordReset from "./Components/PasswordReset";
 function App() {
   return (
-    <Container style={{ width: "400px" }}>
+    <Container>
       <Row>
         <Col>
           <UserAuthContextProvider>

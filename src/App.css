@@ -37,6 +37,10 @@
   }
 } */
 
+#root {
+  width: 100vw;
+}
+
 body {
   background-color: #fafafa;
   display: flex;
@@ -63,4 +67,10 @@ body {
 .g-btn > div > svg {
   width: 40px !important;
   height: 38px !important;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
 }
