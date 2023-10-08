@@ -20,7 +20,7 @@ body {
     margin: 10px 0;
 }
 
-.box {
+.property_container {
     display: flex;
     border: none;
     justify-content: center;
@@ -28,6 +28,6 @@ body {
     align-items: center;
 }
 
-.box>div {
+.property_container>div {
     width: 60%;
 }

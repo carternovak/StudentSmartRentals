@@ -1,10 +1,9 @@
 import React from "react";
-import { Button } from "react-bootstrap";
 import Property from "./Property";
 import PropertyDetails from "./PropertyDetails";
 import Nav from "./Nav";
 import Map from './Map';
-import "../Home.css";
+import "../css/Home.css";
 
 
 const Home = (props) => {
@@ -65,7 +64,7 @@ const Home = (props) => {
           <div className="map-container" style={{ display: "none" }}>
             <Map />
           </div>
-          <div className="p-4 box mt-3 text-center">
+          <div className="p-4 box mt-3 text-center property_container">
             {properties.map(property => (
               <div
                 key={property.id}

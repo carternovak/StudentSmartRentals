@@ -1,7 +1,15 @@
-.login_container {
+.auth_container {
+    display: flex;
+    width: 100%;
+    height: 70vh;
+    align-items: center;
+}
+
+.auth {
     display: flex;
     margin: 0 auto;
     width: 400px;
+    height: 30%;
     flex-direction: column;
     justify-content: center;
     align-items: center;

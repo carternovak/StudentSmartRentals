@@ -77,11 +77,11 @@
     align-self: center;
 }
 
-button {
+.logout {
     transition: 0.2s ease-in-out !important;
 }
 
-button:hover {
+.logout:hover {
     background-color: white !important;
     color: #d90d32 !important;
     transform: scale(1.2);
