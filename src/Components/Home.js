@@ -29,22 +29,22 @@ const Home = (props) => {
       // hide all other properties
       var allProperties = document.querySelectorAll('.property');
       allProperties.forEach(item => {
-        if(item.parentElement.id != selectedProperty.id) {
+        if(parseInt(item.parentElement.id) !== selectedProperty.id) {
           item.className = 'hidden';
         }
       });
 
       // add selected class to selected property
-      var prop = document.getElementById(`${property.id}`);
-      prop.className = `property-${property.id} selected`;
+      var propSelect = document.getElementById(`${property.id}`);
+      propSelect.className = `property-${property.id} selected`;
     } else {
       // hide map
       document.querySelector('.map-container').style.display = 'none';
 
       // show all other properties
-      var allProperties = document.querySelectorAll('.hidden');
-      allProperties.forEach(item => {
-        if(item.parentElement.id != selectedProperty.id) {
+      var allHiddenProperties = document.querySelectorAll('.hidden');
+      allHiddenProperties.forEach(item => {
+        if(parseInt(item.parentElement.id) !== selectedProperty.id) {
           item.className = 'property';
         }
       });
