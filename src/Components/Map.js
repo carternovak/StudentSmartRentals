@@ -11,6 +11,51 @@ const Map = () => {
     },
     zoom: 14
   };
+  
+  const getUserLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+        return (latitude, longitude);
+        // You can do something with the user's location data here
+      },
+      (error) => {
+        console.error("Error getting user's location:", error);
+      }
+    );
+  }
+
+const getUserLatitude = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude } = position.coords;
+        console.log(`Latitude: ${latitude}`);
+        return latitude;
+        // You can do something with the user's location data here
+      },
+      (error) => {
+        console.error("Error getting user's location:", error);
+      }
+    );
+  }
+
+const getUserLongitude = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { longitude } = position.coords;
+        console.log(`Longitude: ${longitude}`);
+        return longitude;
+        // You can do something with the user's location data here
+      },
+      (error) => {
+        console.error("Error getting user's location:", error);
+      }
+    );
+  }
+
+  const latitude = 1;
+  const longitude = 1;   
 
   return (
     // Important! Always set the container height explicitly
@@ -21,8 +66,8 @@ const Map = () => {
         defaultZoom={defaultProps.zoom}
       >
         <AnyReactComponent
-          lat={39.1721943}
-          lng={-86.5099879}
+          lat={latitude}
+          lng={longitude}
           text="Indiana University"
         />
       </GoogleMapReact>

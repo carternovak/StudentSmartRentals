@@ -1,0 +1,44 @@
+.property {
+    display: flex;
+    flex-flow: column nowrap;
+    height: 250px;
+    align-items: start;
+    justify-content: start;
+    padding: 60px;
+    margin-bottom: 20px;
+    border-radius: 25px;
+    border: 1px solid rgba(0, 0, 0, 0.00);
+    background: #FFF;
+    box-shadow: 4px 6px 8px 4px rgba(0, 0, 0, 0.25);
+    transition: 0.2s ease-in-out;
+}
+
+.property:hover {
+    transform: scale(1.1);
+}
+
+.property-name {
+    color: #d90d32
+}
+
+.property-address {
+
+}
+
+.selected {
+    margin: 10px 0;
+    height: 100%;
+    transition: all 0.2s ease-in;
+}
+
+.selected>div {
+    height: 100%;
+}
+
+.box>.selected {
+    width: 100%;
+}
+
+.hidden {
+    display: none;
+}

@@ -9,10 +9,25 @@ body {
 }
 
 .home_layout {
+    width: 80%;
     display: flex;
     justify-content: space-between;
+    margin: 20px auto 0 auto;
 }
 
 .home_layout>div {
-    width: 50%;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.box {
+    display: flex;
+    border: none;
+    justify-content: center;
+    flex-flow: column;
+    align-items: center;
+}
+
+.box>div {
+    width: 60%;
 }
