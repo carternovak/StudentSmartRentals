@@ -1,4 +1,5 @@
 import React from "react";
+import useState from "react";
 import Property from "./Property";
 import PropertyDetails from "./PropertyDetails";
 import Nav from "./Nav";
@@ -9,17 +10,31 @@ import "../css/Home.css";
 const Home = (props) => {
   // Dummy data for test properties
   const properties = [
-      { id: 1, name: "Property 1", address: "123 Main St" },
-      { id: 2, name: "Property 2", address: "456 Elm St" },
-      { id: 3, name: "Property 3", address: "789 Oak St" },
-      { id: 4, name: "Property 4", address: "123 Main St" },
-      { id: 5, name: "Property 5", address: "456 Elm St" },
-      { id: 6, name: "Property 6", address: "789 Oak St" },
+      { id: 1, name: "Property 1", address: "123 Main St", lat: 39.1721943, lng: -86.5099879 },
+      { id: 2, name: "Property 2", address: "456 Elm St", lat: 30.1721943, lng: -80.5099879 },
+      { id: 3, name: "Property 3", address: "789 Oak St", lat: 39.1721943, lng: -86.5099879 },
+      { id: 4, name: "Property 4", address: "123 Main St", lat: 39.1721943, lng: -86.5099879 },
+      { id: 5, name: "Property 5", address: "456 Elm St", lat: 39.1721943, lng: -86.5099879 },
+      { id: 6, name: "Property 6", address: "789 Oak St", lat: 39.1721943, lng: -86.5099879 },
   ];
+
   var selectedProperty = null
+  
+
+  function MapComponent() {
+    return (
+      <Map 
+        locationName={selectedProperty.name}
+        latitude={selectedProperty.lat}
+        longitude={selectedProperty.lng}
+        zoom={18}
+      />  
+   );
+  }
 
   const handlePropertyClick = (property) => {
     if(selectedProperty === null) {
+      
       // update selectedProperty
       selectedProperty = property;
 
@@ -39,6 +54,7 @@ const Home = (props) => {
       propSelect.className = `property-${property.id} selected`;
     } else {
       // hide map
+      //isMapShown = false;
       document.querySelector('.map-container').style.display = 'none';
 
       // show all other properties
@@ -62,7 +78,7 @@ const Home = (props) => {
         <Nav />
         <div className="home_layout">
           <div className="map-container" style={{ display: "none" }}>
-            <Map />
+            { <Map /> }
           </div>
           <div className="p-4 box mt-3 text-center property_container">
             {properties.map(property => (
@@ -79,11 +95,6 @@ const Home = (props) => {
         {selectedProperty && (
           <PropertyDetails property={selectedProperty} />
         )}
-        {selectedProperty && (
-            <div className="map">
-              <Map />
-            </div>
-          )}
         </div>
       </div>
     </>
