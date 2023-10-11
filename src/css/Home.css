@@ -1,0 +1,33 @@
+body {
+    width: 100vw;
+    height: 100vh;
+}
+
+.home_container {
+    width: 100%;
+    height: 100%;
+}
+
+.home_layout {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    margin: 20px auto 0 auto;
+}
+
+.home_layout>div {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.property_container {
+    display: flex;
+    border: none;
+    justify-content: center;
+    flex-flow: column;
+    align-items: center;
+}
+
+.property_container>div {
+    width: 60%;
+}

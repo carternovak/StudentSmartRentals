@@ -1,29 +1,101 @@
 import React from "react";
-import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router";
-import { useUserAuth } from "../context/UserAuthContext";
+import useState from "react";
+import Property from "./Property";
+import PropertyDetails from "./PropertyDetails";
+import Nav from "./Nav";
+import Map from './Map';
+import "../css/Home.css";
 
-const Home = () => {
-  const { logOut, user } = useUserAuth();
-  const navigate = useNavigate();
-  const handleLogout = async () => {
-    try {
-      await logOut();
-      navigate("/");
-    } catch (error) {
-      console.log(error.message);
+
+const Home = (props) => {
+  // Dummy data for test properties
+  const properties = [
+      { id: 1, name: "Property 1", address: "123 Main St", lat: 39.1721943, lng: -86.5099879 },
+      { id: 2, name: "Property 2", address: "456 Elm St", lat: 30.1721943, lng: -80.5099879 },
+      { id: 3, name: "Property 3", address: "789 Oak St", lat: 39.1721943, lng: -86.5099879 },
+      { id: 4, name: "Property 4", address: "123 Main St", lat: 39.1721943, lng: -86.5099879 },
+      { id: 5, name: "Property 5", address: "456 Elm St", lat: 39.1721943, lng: -86.5099879 },
+      { id: 6, name: "Property 6", address: "789 Oak St", lat: 39.1721943, lng: -86.5099879 },
+  ];
+
+  var selectedProperty = null
+  
+
+  function MapComponent() {
+    return (
+      <Map 
+        locationName={selectedProperty.name}
+        latitude={selectedProperty.lat}
+        longitude={selectedProperty.lng}
+        zoom={18}
+      />  
+   );
+  }
+
+  const handlePropertyClick = (property) => {
+    if(selectedProperty === null) {
+      
+      // update selectedProperty
+      selectedProperty = property;
+
+      // show map
+      document.querySelector('.map-container').style.display = 'block';
+
+      // hide all other properties
+      var allProperties = document.querySelectorAll('.property');
+      allProperties.forEach(item => {
+        if(parseInt(item.parentElement.id) !== selectedProperty.id) {
+          item.className = 'hidden';
+        }
+      });
+
+      // add selected class to selected property
+      var propSelect = document.getElementById(`${property.id}`);
+      propSelect.className = `property-${property.id} selected`;
+    } else {
+      // hide map
+      //isMapShown = false;
+      document.querySelector('.map-container').style.display = 'none';
+
+      // show all other properties
+      var allHiddenProperties = document.querySelectorAll('.hidden');
+      allHiddenProperties.forEach(item => {
+        if(parseInt(item.parentElement.id) !== selectedProperty.id) {
+          item.className = 'property';
+        }
+      });
+
+      // reset the property's class and clear selectedProperty
+      var prop = document.getElementById(`${property.id}`);
+      prop.className = `property-${property.id}`;
+      selectedProperty = null;
     }
   };
+
   return (
     <>
-      <div className="p-4 box mt-3 text-center">
-        Hello Welcome <br />
-        {user && user.email}
-      </div>
-      <div className="d-grid gap-2">
-        <Button variant="primary" onClick={handleLogout}>
-          Log out
-        </Button>
+      <div className="home_container">
+        <Nav />
+        <div className="home_layout">
+          <div className="map-container" style={{ display: "none" }}>
+            { <Map /> }
+          </div>
+          <div className="p-4 box mt-3 text-center property_container">
+            {properties.map(property => (
+              <div
+                key={property.id}
+                className={`property-${property.id}`}
+                id={property.id}
+                onClick={() => handlePropertyClick(property)}
+              >
+                <Property name={property.name} address={property.address} />
+              </div>
+            ))}
+          </div>
+        {selectedProperty && (
+          <PropertyDetails property={selectedProperty} />
+        )}
+        </div>
       </div>
     </>
   );

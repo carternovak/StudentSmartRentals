@@ -4,6 +4,7 @@ import { Form, Alert } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import GoogleButton from "react-google-button";
 import { useUserAuth } from "../context/UserAuthContext";
+import "../css/Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -41,46 +42,50 @@ const Login = () => {
 
   return (
     <>
-      <div className="p-4 box">
-        <h2 className="mb-5 text-center">LogIn</h2>
-        {error && <Alert variant="danger">{error}</Alert>}
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Control
-              type="email"
-              placeholder="Email address"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
+      <div className="login_container">
+        <div className="login">
+          <div className="p-4 box">
+            <h2 className="mb-5 text-center">LogIn</h2>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Control
+                  type="email"
+                  placeholder="Email address"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Form.Group>
 
-          <div className="d-grid gap-2">
-            <Button variant="primary" type="Submit">
-              Log In
-            </Button>
+              <div className="d-grid gap-2">
+                <Button variant="primary" type="Submit">
+                  Log In
+                </Button>
+              </div>
+            </Form>
+            <hr />
+            <div>
+              <GoogleButton
+                className="g-btn"
+                type="dark"
+                onClick={handleGoogleSignIn}
+              />
+            </div>
           </div>
-        </Form>
-        <hr />
-        <div>
-          <GoogleButton
-            className="g-btn"
-            type="dark"
-            onClick={handleGoogleSignIn}
-          />
+          <div className="p-4 box mt-3 text-center">
+            Don't have an account? <Link to="/signup">Sign up</Link>
+          </div>
+          <div className="p-4 box mt-3 text-center">
+            Forgot Password? <Link to="/passwordreset">Reset Password</Link>
+          </div>
         </div>
-      </div>
-      <div className="p-4 box mt-3 text-center">
-        Don't have an account? <Link to="/signup">Sign up</Link>
-      </div>
-      <div className="p-4 box mt-3 text-center">
-        Forgot Password? <Link to="/passwordreset">Reset Password</Link>
       </div>
     </>
   );
