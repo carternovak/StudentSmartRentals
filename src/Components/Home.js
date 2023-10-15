@@ -1,100 +1,115 @@
-import React from "react";
-import useState from "react";
+import React, { useState } from "react";
 import Property from "./Property";
 import PropertyDetails from "./PropertyDetails";
 import Nav from "./Nav";
 import Map from './Map';
 import "../css/Home.css";
+import { Helmet } from 'react-helmet';
 
 
 const Home = (props) => {
+  const [currentPropState, setCurrentPropState] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null);
   // Dummy data for test properties
   const properties = [
       { id: 1, name: "Property 1", address: "123 Main St", lat: 39.1721943, lng: -86.5099879 },
-      { id: 2, name: "Property 2", address: "456 Elm St", lat: 30.1721943, lng: -80.5099879 },
-      { id: 3, name: "Property 3", address: "789 Oak St", lat: 39.1721943, lng: -86.5099879 },
-      { id: 4, name: "Property 4", address: "123 Main St", lat: 39.1721943, lng: -86.5099879 },
-      { id: 5, name: "Property 5", address: "456 Elm St", lat: 39.1721943, lng: -86.5099879 },
-      { id: 6, name: "Property 6", address: "789 Oak St", lat: 39.1721943, lng: -86.5099879 },
+      // Los Angeles example is just to show that the map works with any location
+      { id: 2, name: "Los Angeles", address: "LA", lat: 34.04394, lng: -118.22942 },
+      { id: 3, name: "Property 3", address: "789 Oak St", lat: 39.17207, lng: -86.51219 },
+      { id: 4, name: "Property 4", address: "123 Main St", lat: 39.174, lng: -86.5099879 },
+      { id: 5, name: "SRSC", address: "456 Elm St", lat: 39.17350, lng: -86.51214 },
+      { id: 6, name: "Eigenmann Hall", address: "789 Oak St", lat: 39.17101, lng: -86.50871 },
   ];
-
-  var selectedProperty = null
   
+  function TogglePropState() {
+    setCurrentPropState(!currentPropState);
+  }
 
   function MapComponent() {
+    console.log("Selected Prop: " + selectedProperty);
     return (
       <Map 
         locationName={selectedProperty.name}
         latitude={selectedProperty.lat}
         longitude={selectedProperty.lng}
         zoom={18}
+        properties={properties}
       />  
    );
   }
 
-  const handlePropertyClick = (property) => {
+  function ShowMap() {
+    if(selectedProperty !== null) {
+      return (
+        <MapComponent />
+      )
+    } else {
+      return null;
+    }
+  }
+
+  function ShowProperty() {
+    if(currentPropState === false) {
+      return (
+        (properties.map(property => (
+          <div
+            key={property.id}
+            className={`property-${property.id}`}
+            id={property.id}
+            onClick={() => changeProperty(property)}
+          >
+            <Property name={property.name} address={property.address} />
+          </div>
+        )))
+      );
+    } else {
+    if(selectedProperty !== null) {
+      return (
+        <div className={`property selected`} onClick={() => changeProperty(null)}>
+          <PropertyDetails property={selectedProperty} />
+        </div>
+      );
+      } else {
+        return null;
+      }
+    }
+  }
+
+  const changeProperty = (property) => {
     if(selectedProperty === null) {
-      
+
       // update selectedProperty
-      selectedProperty = property;
+      setSelectedProperty(property);
 
       // show map
-      document.querySelector('.map-container').style.display = 'block';
+      document.querySelector('.map-container').style.display = 'inline';
 
-      // hide all other properties
-      var allProperties = document.querySelectorAll('.property');
-      allProperties.forEach(item => {
-        if(parseInt(item.parentElement.id) !== selectedProperty.id) {
-          item.className = 'hidden';
-        }
-      });
-
-      // add selected class to selected property
-      var propSelect = document.getElementById(`${property.id}`);
-      propSelect.className = `property-${property.id} selected`;
     } else {
       // hide map
-      //isMapShown = false;
       document.querySelector('.map-container').style.display = 'none';
 
-      // show all other properties
-      var allHiddenProperties = document.querySelectorAll('.hidden');
-      allHiddenProperties.forEach(item => {
-        if(parseInt(item.parentElement.id) !== selectedProperty.id) {
-          item.className = 'property';
-        }
-      });
-
-      // reset the property's class and clear selectedProperty
-      var prop = document.getElementById(`${property.id}`);
-      prop.className = `property-${property.id}`;
-      selectedProperty = null;
+      // Clear selectedProperty
+      setSelectedProperty(null);
     }
+    
+    // Toggles between showing list of properties or a single property
+    TogglePropState();
   };
 
   return (
     <>
+      <Helmet>
+        <title>Home | StudentSmart Rentals</title>
+      </Helmet>
       <div className="home_container">
         <Nav />
         <div className="home_layout">
           <div className="map-container" style={{ display: "none" }}>
-            { <Map /> }
+            { ShowMap() }
           </div>
-          <div className="p-4 box mt-3 text-center property_container">
-            {properties.map(property => (
-              <div
-                key={property.id}
-                className={`property-${property.id}`}
-                id={property.id}
-                onClick={() => handlePropertyClick(property)}
-              >
-                <Property name={property.name} address={property.address} />
-              </div>
-            ))}
+          <div className="p-4 box mt-3 text-center property_container" >
+            { ShowProperty() }
           </div>
-        {selectedProperty && (
-          <PropertyDetails property={selectedProperty} />
-        )}
         </div>
       </div>
     </>
