@@ -10,10 +10,12 @@ const Map = (props) => {
   const [properties, setProperties] = useState(props.properties);
   const [userPosition, setUserPosition] = useState("");
   const [markers, setMarkers] = useState([]);
+  const [selectedProperty, setSelectedProperty] = useState(props.selectedProperty);
   const [center, setCenter] = useState({
     lat: props.latitude,
     lng: props.longitude
   });
+  
   const defaultProps = {
     center: {
       lat: 39.1721943,
@@ -35,7 +37,7 @@ const Map = (props) => {
           text: `${property.name}`,
           color: 'white',
           fontSize: '12px',
-          fontWeight: 'bold',
+          fontWeight: 'regular',
           className: 'marker-position',
       },
         }),
@@ -43,57 +45,63 @@ const Map = (props) => {
         newMarkers.push(marker)
       
     ));
-    console.log(newMarkers);
-    console.log("User Pos: " + userPosition);
-    if(userPosition) {
-      markers.push(
-        new maps.Marker({
-          position: { lat: userPosition.lat, lng: userPosition.lng },
-          map,
-          title: "User Location"
+
+    newMarkers.forEach(marker => {
+      if(marker.title === selectedProperty.name) {
+        marker.setLabel({
+          text: `${marker.title}`,
+          color: '#d90d32',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          className: 'marker-selected',
         })
-      )
-    }
+      }
+    });
+
+    console.log(newMarkers);
+    
     setMarkers(newMarkers);
   };
 
   // Get the user's location
-  const getUserLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-          setUserPosition(position);
-        },
-        (error) => {
-          console.error("Error getting user's location:", error);
-        }
-      );
-    } else {
-      console.error("Geolocation is not supported by your browser.");
-    }
-  }
-
-  useEffect(() => {
-    getUserLocation(); // Call this when the component mounts to get the user's location
-  }, []);
+  // Currently not being used
+  // const getUserLocation = () => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         const { latitude, longitude } = position.coords;
+  //         console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+  //         setUserPosition(position);
+  //       },
+  //       (error) => {
+  //         console.error("Error getting user's location:", error);
+  //       }
+  //     );
+  //   } else {
+  //     console.error("Geolocation is not supported by your browser.");
+  //   }
+  // }
+  //
+  // useEffect(() => {
+  //   getUserLocation(); // Call this when the component mounts to get the user's location
+  // }, []);
 
   
 
-  console.log(props.latitude);
+  console.log(props.selectedProperty.latitude);
   console.log("Lat: " + properties[0].lat);
   return (
     // Important! Always set the container height explicitly
     <div style={{ height: '100vh', maxHeight: '600px' }}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: "AIzaSyDMgRIDq561DGmjRL8g0U4k6K7JXS_PUgc" }}
-        //defaultCenter={defaultProps.center}
-        //defaultZoom={defaultProps.zoom}
+        defaultCenter={defaultProps.center}
+        defaultZoom={defaultProps.zoom}
         center={center}
         yesIWantToUseGoogleMapApiInternals
         zoom={17}
         onGoogleApiLoaded={({map, maps}) => renderMarkers(map, maps)}
+        draggable={false}
       >
         
       </GoogleMapReact>

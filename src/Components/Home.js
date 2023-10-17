@@ -29,9 +29,9 @@ const Home = (props) => {
     console.log("Selected Prop: " + selectedProperty);
     return (
       <Map 
-        locationName={selectedProperty.name}
         latitude={selectedProperty.lat}
         longitude={selectedProperty.lng}
+        selectedProperty={selectedProperty}
         zoom={18}
         properties={properties}
       />  
