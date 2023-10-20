@@ -9,6 +9,8 @@ import { UserAuthContextProvider } from "./context/UserAuthContext";
 import PhoneSignUp from "./Components/PhoneSignUp";
 import PasswordReset from "./Components/PasswordReset";
 import SellForm from "./Components/SellForm";
+import Chat from "./Components/Chat"
+
 function App() {
   return (
     <Container>
@@ -40,6 +42,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <SellForm />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/chat"
+                element={
+                  <ProtectedRoute>
+                    <Chat />
                   </ProtectedRoute>
                 }
               />
