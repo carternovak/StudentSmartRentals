@@ -89,6 +89,6 @@
   transform: scale(1.2);
 }
 
-img {
+.link-container>img {
   pointer-events: none;
 }
