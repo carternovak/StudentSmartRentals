@@ -5,11 +5,12 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import { ChatContextProvider } from "./context/ChatContext";
 import { UserAuthContextProvider } from "./context/UserAuthContext";
-import PhoneSignUp from "./Components/PhoneSignUp";
 import PasswordReset from "./Components/PasswordReset";
 import SellForm from "./Components/SellForm";
 import Chat from "./Components/Chat"
+import PhoneRegistration from "./Components/PhoneRegistration";
 
 function App() {
   return (
@@ -31,11 +32,12 @@ function App() {
                 path="/phonesignup"
                 element={
                   <ProtectedRoute>
-                    <PhoneSignUp />
+                    <PhoneRegistration />
                   </ProtectedRoute>
                 }
               />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/enroll" element={<PhoneRegistration />} />
               <Route path="/passwordreset" element={<PasswordReset />} />
               <Route
                 path="/sell"
@@ -48,8 +50,11 @@ function App() {
               <Route
                 path="/chat"
                 element={
+                  
                   <ProtectedRoute>
-                    <Chat />
+                    <ChatContextProvider>
+                      <Chat />
+                    </ChatContextProvider>
                   </ProtectedRoute>
                 }
               />

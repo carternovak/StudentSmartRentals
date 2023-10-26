@@ -5,11 +5,13 @@ import {
   onAuthStateChanged,
   signOut,
   GoogleAuthProvider,
+  //PhoneAuthProvider,
   signInWithPopup,
   sendEmailVerification,
   RecaptchaVerifier,
-  signInWithPhoneNumber,
+  //signInWithPhoneNumber,
   sendPasswordResetEmail,
+  //signInWithCredential,
 } from "firebase/auth";
 import { auth } from "../firebase";
 
@@ -35,14 +37,14 @@ export function UserAuthContextProvider({ children }) {
     return sendEmailVerification(auth.currentUser);
   }
 
-  function setUpRecaptha(number) {
+  function setUpRecaptha() {
     const recaptchaVerifier = new RecaptchaVerifier(
       auth,
       "recaptcha-container",
       {}
     );
     recaptchaVerifier.render();
-    return signInWithPhoneNumber(auth, number, recaptchaVerifier);
+    return recaptchaVerifier;
   }
 
   function passwordResetEmail(emailId) {

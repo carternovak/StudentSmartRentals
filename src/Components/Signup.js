@@ -3,6 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Alert } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useUserAuth } from "../context/UserAuthContext";
+import { updateProfile } from "firebase/auth";
+import { auth, db, storage } from "../firebase";
+import { ref } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
+
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -16,13 +21,27 @@ const Signup = () => {
     try {
       const userCredential = await signUp(email, password);
       await verifyEmail(userCredential.user);
-      alert(
-        "Link has been sent to Email ID! Kindly verify using link and signIn!"
-      );
-      navigate("/");
+      alert("Link has been sent to Email ID! Kindly verify using link and signIn!");
+      const res = userCredential;
+      console.log("User id: ", res.user.uid);
+      const date = new Date().getTime();
+      const storageRef = ref(storage, `${email.id + date}`);
+
+      await updateProfile(res.user, {
+        displayName: email,
+      });
+
+      await setDoc(doc(db, "users", res.user.uid), {
+        uid: res.user.uid,
+        email,
+      });
+      
+      await setDoc(doc(db, "userChats", res.user.uid), {});
+      
     } catch (err) {
       setError(err.message);
     }
+    navigate("/enroll");
   };
 
   return (
