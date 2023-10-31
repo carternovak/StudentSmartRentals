@@ -9,6 +9,7 @@ import { UserAuthContextProvider } from "./context/UserAuthContext";
 import PhoneSignUp from "./Components/PhoneSignUp";
 import PasswordReset from "./Components/PasswordReset";
 import SellForm from "./Components/SellForm";
+import UserProfilePage from "./Components/Users/UserProfile";
 function App() {
   return (
     <Container>
@@ -40,6 +41,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <SellForm />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <UserProfilePage />
                   </ProtectedRoute>
                 }
               />

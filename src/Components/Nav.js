@@ -41,6 +41,9 @@ function Nav() {
                         <Link to='/help'>
                             <li>Help</li>
                         </Link>
+                        <Link to='/profile'>
+                            <li>Profile</li>
+                        </Link>
                         <Button className='logout' variant='primary' onClick={handleLogout} style={{ backgroundColor: '#d90d32', color: 'white', border: 'none' }}>Logout</Button>
                     </ul>
                 </div>
