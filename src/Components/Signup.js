@@ -7,6 +7,7 @@ import { updateProfile } from "firebase/auth";
 import { auth, db, storage } from "../firebase";
 import { ref } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
+import "../css/Login.css";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -17,8 +18,14 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     try {
+      if(email.trim() === '' && password.trim() === '') {
+        throw new Error("Please enter an email and password!");
+      } else if (email.trim() === '') {
+        throw new Error("Email cannot be empty!");
+      } else if (password.trim() === '') {
+        throw new Error("Password cannot be empty!");
+      }
       const userCredential = await signUp(email, password);
       await verifyEmail(userCredential.user);
       alert("Link has been sent to Email ID! Kindly verify using link and signIn!");
@@ -35,46 +42,50 @@ const Signup = () => {
         uid: res.user.uid,
         email,
       });
-      
+
       await setDoc(doc(db, "userChats", res.user.uid), {});
-      
+
+      navigate("/enroll");
     } catch (err) {
       setError(err.message);
     }
-    navigate("/enroll");
   };
 
   return (
     <>
-      <div className="p-4 box">
-        <h2 className="mb-3 text-center"> Signup </h2>
-        {error && <Alert variant="danger">{error}</Alert>}
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Control
-              type="email"
-              placeholder="Email address"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
+      <div className="login_container">
+        <div className="login">
+          <div className="p-4 box">
+            <h2 className="mb-3 text-center"> Signup </h2>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Control
+                  type="email"
+                  placeholder="Email address"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Form.Group>
 
-          <div className="d-grid gap-2">
-            <Button variant="primary" type="Submit">
-              Sign up
-            </Button>
+              <div className="d-grid gap-2">
+                <Button variant="primary" type="Submit">
+                  Sign up
+                </Button>
+              </div>
+            </Form>
           </div>
-        </Form>
-      </div>
-      <div className="p-4 box mt-3 text-center">
-        Already have an account? <Link to="/">Log In</Link>
+          <div className="p-4 box mt-3 text-center login">
+            Already have an account? <Link to="/">Log In</Link>
+          </div>
+        </div>
       </div>
     </>
   );

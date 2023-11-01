@@ -63,7 +63,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await googleSignIn();
-      navigate("/enroll");
+      navigate("/home");
     } catch (error) {
       console.log(error.message);
     }
