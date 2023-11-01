@@ -1,51 +1,57 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { collection, query, where, getDocs, setDoc, doc, updateDoc, serverTimestamp, getDoc } from "firebase/firestore";
-import { db, auth } from "../firebase";
+import { db } from "../firebase";
 import { useUserAuth } from "../context/UserAuthContext";
 import DefaultIcon from "../images/DefaultUser.svg";
 
 const ChatSearch = () => {
     const[err, setErr] = useState(false);
-    const[user, setUser] = useState(null);
+    const[searchedUser, setSearchedUser] = useState(null);
     const[email, setEmail] = useState("");
-    const { currentUser } = useUserAuth();
-    console.log("Current user: ", currentUser);
+    const { user } = useUserAuth();
+    //console.log("Current user: ", currentUser);
 
     const handleSearch = async () => {
-        const query = query(collection(db, "users"), where("email", "==", email));
-
+        console.log("Email: ", email);
+        const q = query(
+            collection(db, "users"),
+            where("email", "==", email)
+          );
         try {
-            const querySnapshot = await getDocs(query);
+            const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => { 
-                setUser(doc.data());
+                console.log("Doc: ", doc.data());
+                setSearchedUser(doc.data());
             });
 
         } catch(err) {
+            console.log("EREREORO");
             console.log(err);
         }
+        console.log("Searched user: ", searchedUser);
     };
 
     const handleSelect = async () => {
         
-        const combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
+        const combinedId = user.uid > searchedUser.uid ? user.uid + searchedUser.uid : searchedUser.uid + user.uid;
         try {
             const response = await getDoc(doc(db, "chats", combinedId));
 
             if(!response.exists()) {
                 await setDoc(doc(db, "chats", combinedId), { messages: [] });
 
-                await updateDoc(doc(db, "users", currentUser.uid), {
+                await updateDoc(doc(db, "users", user.uid), {
                     [combinedId + ".userInfo"]: {
-                        uid: user.uid,
-                        email: user.email,
+                        uid: searchedUser.uid,
+                        email: searchedUser.email,
                     },
                     [combinedId + ".date"]: serverTimestamp(),
                 });
 
-                await updateDoc(doc(db, "users", user.uid), {
+                await updateDoc(doc(db, "users", searchedUser.uid), {
                     [combinedId + ".userInfo"]: {
-                        uid: user.uid,
-                        email: user.email,
+                        uid: searchedUser.uid,
+                        email: searchedUser.email,
                     },
                     [combinedId + ".date"]: serverTimestamp(),
                 });
@@ -53,10 +59,11 @@ const ChatSearch = () => {
             }
 
         } catch(err) {
+            setErr(err);
             console.log(err);
         }
 
-        setUser(null);
+        setSearchedUser(null);
         setEmail("");
     };
 
@@ -78,11 +85,11 @@ const ChatSearch = () => {
                 />
             </div>
             {err && <span>Not found</span>}
-            {user && (
+            {searchedUser && (
                 <div className="user-chat" onClick={handleSelect}>
-                    <img src={user.imgUrl ? user.imgUrl : DefaultIcon} alt={user.email} />
+                    <img src={searchedUser.imgUrl ? searchedUser.imgUrl : DefaultIcon} alt={searchedUser.email} />
                     <div className="user-chat-details">
-                        <span>{user.email}</span>
+                        <span>{searchedUser.email}</span>
                     </div>
                 </div>
             )}

@@ -7,7 +7,7 @@ import { useUserAuth } from "../context/UserAuthContext";
 import { useNavigate } from "react-router";
 
 function Nav() {
-    const { logOut, user } = useUserAuth();
+    const { logOut } = useUserAuth();
     const navigate = useNavigate();
     const handleLogout = async () => {
     try {

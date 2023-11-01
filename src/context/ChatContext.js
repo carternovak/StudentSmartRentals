@@ -1,10 +1,11 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useReducer } from "react";
 import { useUserAuth } from "./UserAuthContext";
 
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
-    const { currentUser } = useUserAuth();
+    const { user } = useUserAuth();
+    console.log("Current chat user: ", user);
     const INIT_STATE = {
         chatId: "null",
         user: {},
@@ -15,7 +16,7 @@ export const ChatContextProvider = ({ children }) => {
             case "SELECT_CHAT":
                 return {
                     user: action.payload,
-                    chatId: currentUser.uid > action.payload.uid ? currentUser.uid + action.payload.uid : action.payload.uid + currentUser.uid,
+                    chatId: user.uid > action.payload.uid ? user.uid + action.payload.uid : action.payload.uid + user.uid,
                 };
             default:
                 return state;

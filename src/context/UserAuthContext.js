@@ -27,7 +27,7 @@ export function UserAuthContextProvider({ children }) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
   function logOut() {
-    return signOut(auth);
+    return signOut(auth); 
   }
   function googleSignIn() {
     const googleAuthProvider = new GoogleAuthProvider();
@@ -53,7 +53,6 @@ export function UserAuthContextProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
-      console.log("Auth", currentuser);
       setUser(currentuser);
     });
 
