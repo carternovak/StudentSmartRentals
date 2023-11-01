@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Property from "./Property";
 import PropertyDetails from "./PropertyDetails";
 import Nav from "./Nav";
@@ -6,6 +6,7 @@ import Map from "./Map";
 import "../css/Home.css";
 import { Helmet } from "react-helmet";
 import Search from "./Search";
+import axios from "axios";
 
 const Home = (props) => {
   const [currentPropState, setCurrentPropState] = useState(false);
@@ -146,6 +147,18 @@ const Home = (props) => {
     TogglePropState();
   };
 
+  // backend integration starts here
+  // we will get ll the community data just iterate to show up the card details
+  const fetchAllCommunityData = async() => {
+    const {data} = await axios.get("http://localhost:5000/communityData/getAllCommunityData");
+    // console.log(data); 
+  }
+  useEffect(()=>{
+fetchAllCommunityData();
+
+// backend integration ends here
+
+  })
   return (
     <>
       <Helmet>

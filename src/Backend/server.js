@@ -1,6 +1,11 @@
 const exp = require("express");
 const connectDB = require("./database");
+const cors = require("cors");
 const app = exp();
+
+app.use(cors({
+  origin : "*"
+}))
 app.use(exp.json());
 
 //db connection
@@ -48,4 +53,4 @@ app.use((err, req, res, next) => {
   res.send({ message: "Error occured", reason: err.message });
 });
 
-app.listen(3000, () => console.log("server is on port 3000"));
+app.listen(5000, () => console.log("server is on port 3000"));

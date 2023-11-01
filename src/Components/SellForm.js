@@ -1,3 +1,4 @@
+import async from "hbs/lib/async";
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
@@ -89,6 +90,78 @@ function SellForm() {
     }
   };
 
+  // Backend intgration starts here
+  // this is the basic sructure of post data, we need to include some more form inputs to get the required data
+  
+  const submitFormData = async() =>{
+    const dataToBeSent = {
+      "CommunityID": "3",
+      "CommunityName": "town and county",
+      "CommDistanceFromCollege": 2.5,
+      "CommStAddress": "123 Main St",
+      "CommCity": "Sample City",
+      "State": "Sample State",
+      "Zipcode": "12345",
+      "CommLocation": {
+          "latitude": 40.7128,
+          "longitude": -74.0060
+      },
+      "BusesToCollege": [
+          6,
+          9,
+          1
+      ],
+      "CommunityRules": [
+          "Rule1",
+          "Rule2"
+      ],
+      "CommunityFeatures": [
+          "Swimming Pool and Sundeck",
+          "Dogs and Cats are Welcome"
+      ],
+      "CommApartments":
+          {
+              "ApartmentID": "A101",
+              "AptName": "Sample Apartment",
+              "AptUnits": 
+                  {
+                      "UnitNumber": "101",
+                      "UnitPrice": 1500,
+                      "Bedrooms": 2,
+                      "Bathrooms": 1,
+                      "SQFT": 1000,
+                      "IsAvailable": true,
+                      "Leaseperiod": 12,
+                      "UnitModeling": {
+                          "Old": true,
+                          "New": false,
+                          "remodeled": false
+                      },
+                      "Unit_Images": [
+                          "image1.jpg",
+                          "image2.jpg"
+                      ],
+                      "HomeTourLink": "http://example.com/tour",
+                      "UnitFeatures": [
+                          "Spacious Living Room",
+                          "Built-In Bookcases"
+                      ]
+                  }
+          }
+  }
+
+  const result = await fetch('http://localhost:5000/communityData/postCommunityData', {
+    method : 'POST', 
+    headers : {
+      'Content-Type' : 'application/json'
+    },
+    body : JSON.stringify(dataToBeSent)
+  })
+  const resultback = await result.json();
+  console.log(resultback)
+  }
+
+  // Backend intgration ends here
   return (
     <div style={{ display: "block", width: 700, padding: 30 }}>
       <h4>Seller Form</h4>
@@ -252,7 +325,7 @@ function SellForm() {
           )}
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit" onClick={submitFormData}>
           Click here to submit form
         </Button>
         <Button variant="danger" type="button" onClick={returnToHomePage}>
