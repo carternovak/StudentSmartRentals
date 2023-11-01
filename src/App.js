@@ -56,6 +56,7 @@ function App() {
                     <ChatContextProvider>
                       <Chat />
                     </ChatContextProvider>
+                    </ProtectedRoute>
                 }
               />
               <Route
