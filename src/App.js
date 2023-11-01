@@ -11,6 +11,7 @@ import PasswordReset from "./Components/PasswordReset";
 import SellForm from "./Components/SellForm";
 import Chat from "./Components/Chat"
 import PhoneRegistration from "./Components/PhoneRegistration";
+import UserProfilePage from "./Components/Users/UserProfile";
 
 function App() {
   return (
@@ -55,6 +56,13 @@ function App() {
                     <ChatContextProvider>
                       <Chat />
                     </ChatContextProvider>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <UserProfilePage />
                   </ProtectedRoute>
                 }
               />
