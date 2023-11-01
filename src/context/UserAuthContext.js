@@ -5,11 +5,13 @@ import {
   onAuthStateChanged,
   signOut,
   GoogleAuthProvider,
+  //PhoneAuthProvider,
   signInWithPopup,
   sendEmailVerification,
   RecaptchaVerifier,
-  signInWithPhoneNumber,
+  //signInWithPhoneNumber,
   sendPasswordResetEmail,
+  //signInWithCredential,
 } from "firebase/auth";
 import { auth } from "../firebase";
 
@@ -25,7 +27,7 @@ export function UserAuthContextProvider({ children }) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
   function logOut() {
-    return signOut(auth);
+    return signOut(auth); 
   }
   function googleSignIn() {
     const googleAuthProvider = new GoogleAuthProvider();
@@ -35,14 +37,14 @@ export function UserAuthContextProvider({ children }) {
     return sendEmailVerification(auth.currentUser);
   }
 
-  function setUpRecaptha(number) {
+  function setUpRecaptha() {
     const recaptchaVerifier = new RecaptchaVerifier(
       auth,
       "recaptcha-container",
       {}
     );
     recaptchaVerifier.render();
-    return signInWithPhoneNumber(auth, number, recaptchaVerifier);
+    return recaptchaVerifier;
   }
 
   function passwordResetEmail(emailId) {
@@ -51,7 +53,6 @@ export function UserAuthContextProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
-      console.log("Auth", currentuser);
       setUser(currentuser);
     });
 

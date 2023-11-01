@@ -7,7 +7,7 @@ import { useUserAuth } from "../context/UserAuthContext";
 import { useNavigate } from "react-router";
 
 function Nav() {
-    const { logOut, user } = useUserAuth();
+    const { logOut } = useUserAuth();
     const navigate = useNavigate();
     const handleLogout = async () => {
     try {
@@ -40,6 +40,9 @@ function Nav() {
                     <ul className="nav-links2">
                         <Link to='/help'>
                             <li>Help</li>
+                        </Link>
+                        <Link to='/chat'>
+                            <li>Chat</li>
                         </Link>
                         <Link to='/profile'>
                             <li>Profile</li>
