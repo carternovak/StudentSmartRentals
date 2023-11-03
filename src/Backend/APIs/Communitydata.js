@@ -2,7 +2,7 @@ const exp = require("express");
 const communityModel = require("../Schemas/communitySchema");
 const communityAPI = exp.Router();
 
-// http://localhost:3000/communityData/getAllCommunityData
+// http://localhost:5000/communityData/getAllCommunityData
 communityAPI.get("/getAllCommunityData", async (req, res) => {
   try {
     const data = await communityModel.find();
@@ -16,7 +16,7 @@ communityAPI.get("/getAllCommunityData", async (req, res) => {
   }
 });
 
-// http://localhost:3000/communityData/getAllCommunityData/:communityId
+// http://localhost:5000/communityData/getAllCommunityData/:communityId
 communityAPI.get("/getAllCommunityData/:communityId", async (req, res) => {
   const commId = req.params.communityId;
   try {
@@ -31,7 +31,7 @@ communityAPI.get("/getAllCommunityData/:communityId", async (req, res) => {
   }
 });
 
-// http://localhost:3000/communityData/updateCommunityData/:communityId
+// http://localhost:5000/communityData/updateCommunityData/:communityId
 communityAPI.put("/updateCommunityData/:communityId", async (req, res) => {
   const commId = req.params.communityId;
   const updatedetails = req.body;
@@ -158,7 +158,7 @@ communityAPI.put("/updateCommunityData/:communityId", async (req, res) => {
   }
 });
 
-// http://localhost:3000/communityData/deleteCommunityData/:communityId
+// http://localhost:5000/communityData/deleteCommunityData/:communityId
 communityAPI.delete("/deleteCommunityData/:communityId", async (req, res) => {
   const commId = req.params.communityId;
   try {
@@ -174,7 +174,7 @@ communityAPI.delete("/deleteCommunityData/:communityId", async (req, res) => {
   }
 });
 
-// http://localhost:3000/communityData/postCommunityData
+// http://localhost:5000/communityData/postCommunityData
 
 communityAPI.post("/postCommunityData", async (req, res) => {
   const communityData = new communityModel({
@@ -215,7 +215,7 @@ communityAPI.post("/postCommunityData", async (req, res) => {
     },
   });
   const val = await communityData.save();
-  res.json(val);
+  res.json("Posted and saved in Database successfully");
 });
 
 module.exports = communityAPI;

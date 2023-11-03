@@ -83,7 +83,6 @@ const Signup = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Group>
-
               <div>
                 <label className="role-label">Please select your role: </label>
                 <select className="form-select role-select" value={selectedRole} onChange={handleSelectChange}>
@@ -91,7 +90,6 @@ const Signup = () => {
                   <option value="owner">Property Owner</option>
                 </select>
               </div>
-
               <div className="d-grid gap-2">
                 <Button variant="primary" type="Submit">
                   Sign up
