@@ -6,6 +6,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    z-index: 1;
 }
 
 .login {
@@ -28,4 +29,9 @@
 
 .role-select {
     margin: 5px 0 10px 0;
+}
+
+#hide-captcha {
+    position: fixed;
+    z-index: -1;
 }
