@@ -14,6 +14,7 @@ const Signup = () => {
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
   const { signUp, verifyEmail } = useUserAuth();
+  const [selectedRole, setSelectedRole] = useState('user');
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -40,7 +41,11 @@ const Signup = () => {
 
       await setDoc(doc(db, "users", res.user.uid), {
         uid: res.user.uid,
-        email,
+        email: res.user.email,
+        phone: res.user.phoneNumber ? res.user.phoneNumber : "",
+        displayName: res.user.displayName ? res.user.displayName : "",
+        dob: "",
+        role: selectedRole,
       });
 
       await setDoc(doc(db, "userChats", res.user.uid), {});
@@ -49,6 +54,10 @@ const Signup = () => {
     } catch (err) {
       setError(err.message);
     }
+  };
+
+  const handleSelectChange = (event) => {
+    setSelectedRole(event.target.value);
   };
 
   return (
@@ -74,7 +83,13 @@ const Signup = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Group>
-
+              <div>
+                <label className="role-label">Please select your role: </label>
+                <select className="form-select role-select" value={selectedRole} onChange={handleSelectChange}>
+                  <option value="user">Renter</option>
+                  <option value="owner">Property Owner</option>
+                </select>
+              </div>
               <div className="d-grid gap-2">
                 <Button variant="primary" type="Submit">
                   Sign up

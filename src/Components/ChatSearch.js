@@ -3,32 +3,40 @@ import { collection, query, where, getDocs, setDoc, doc, updateDoc, serverTimest
 import { db } from "../firebase";
 import { useUserAuth } from "../context/UserAuthContext";
 import DefaultIcon from "../images/DefaultUser.svg";
+import SearchIcon from "../images/SearchIcon.svg";
 
 const ChatSearch = () => {
     const[err, setErr] = useState(false);
     const[searchedUser, setSearchedUser] = useState(null);
     const[email, setEmail] = useState("");
     const { user } = useUserAuth();
-    //console.log("Current user: ", currentUser);
 
     const handleSearch = async () => {
-        console.log("Email: ", email);
+        var foundUser = false;
         const q = query(
             collection(db, "users"),
             where("email", "==", email)
           );
         try {
+            
             const querySnapshot = await getDocs(q);
+
             querySnapshot.forEach((doc) => { 
                 console.log("Doc: ", doc.data());
+                foundUser = true;
+                setErr(false);
                 setSearchedUser(doc.data());
             });
 
         } catch(err) {
-            console.log("EREREORO");
-            console.log(err);
+            setErr(true);
+            console.log("Is erroring: ", err);
+            console.error(err);
         }
-        console.log("Searched user: ", searchedUser);
+        if(!foundUser) {
+            setErr(true);
+            setSearchedUser(null);
+        }
     };
 
     const handleSelect = async () => {
@@ -36,22 +44,24 @@ const ChatSearch = () => {
         const combinedId = user.uid > searchedUser.uid ? user.uid + searchedUser.uid : searchedUser.uid + user.uid;
         try {
             const response = await getDoc(doc(db, "chats", combinedId));
-
             if(!response.exists()) {
                 await setDoc(doc(db, "chats", combinedId), { messages: [] });
 
-                await updateDoc(doc(db, "users", user.uid), {
+
+                await updateDoc(doc(db, "userChats", user.uid), {
                     [combinedId + ".userInfo"]: {
                         uid: searchedUser.uid,
                         email: searchedUser.email,
+                        displayName: searchedUser.displayName? searchedUser.displayName : "",
                     },
                     [combinedId + ".date"]: serverTimestamp(),
                 });
 
-                await updateDoc(doc(db, "users", searchedUser.uid), {
+                await updateDoc(doc(db, "userChats", searchedUser.uid), {
                     [combinedId + ".userInfo"]: {
-                        uid: searchedUser.uid,
-                        email: searchedUser.email,
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName? user.displayName : "",
                     },
                     [combinedId + ".date"]: serverTimestamp(),
                 });
@@ -59,19 +69,18 @@ const ChatSearch = () => {
             }
 
         } catch(err) {
-            setErr(err);
+            setErr(true);
             console.log(err);
         }
-
+        
         setSearchedUser(null);
         setEmail("");
     };
 
     const handleKeyPress = (e) => {
-        if (e.key === "Enter") {
-            handleSearch();
-        }
-    };
+        setErr(false);
+        e.code === "Enter" && handleSearch();
+      };
 
     return (
         <div className="search">
@@ -82,14 +91,30 @@ const ChatSearch = () => {
                 onKeyDown={handleKeyPress}
                 onChange={(e) => setEmail(e.target.value)} 
                 value={email}
+                id="form1"
+                className="form-control"
                 />
+                <button type="button" onClick={handleSearch} class="btn btn-primary search-button">
+                    <img src={SearchIcon} alt="" />
+                </button>
             </div>
-            {err && <span>Not found</span>}
+            {err && (
+                <div className="chat-users selected-chat">
+                    <div className="user-chat" >
+                        <img src={DefaultIcon} alt={"Invalid User"} />
+                        <div className="details">
+                            <span>User not found</span>
+                        </div>
+                    </div>
+                </div>
+            )}
             {searchedUser && (
-                <div className="user-chat" onClick={handleSelect}>
-                    <img src={searchedUser.imgUrl ? searchedUser.imgUrl : DefaultIcon} alt={searchedUser.email} />
-                    <div className="user-chat-details">
-                        <span>{searchedUser.email}</span>
+                <div className="chat-users selected-chat">
+                    <div className="user-chat" onClick={handleSelect}>
+                        <img src={searchedUser.imgUrl ? searchedUser.imgUrl : DefaultIcon} alt={searchedUser.email} />
+                        <div className="details">
+                            <span>{searchedUser.email}</span>
+                        </div>
                     </div>
                 </div>
             )}

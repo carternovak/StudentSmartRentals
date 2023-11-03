@@ -7,7 +7,9 @@ import { useUserAuth } from "../context/UserAuthContext";
 import { getMultiFactorResolver, PhoneAuthProvider } from 'firebase/auth';
 import "../css/Login.css";
 import MultiFactorLogin from "./MultiFactorLogin";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,6 +22,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     setError("");
     if (user !== null) {
@@ -62,7 +65,23 @@ const Login = () => {
   const handleGoogleSignIn = async (e) => {
     e.preventDefault();
     try {
-      await googleSignIn();
+      const userCredential = await googleSignIn();
+
+      const res = userCredential;
+      await updateProfile(res.user, {
+        displayName: email,
+      });
+
+      await setDoc(doc(db, "users", res.user.uid), {
+        uid: res.user.uid,
+        email: res.user.email,
+        phone: res.user.phoneNumber ? res.user.phoneNumber : "",
+        displayName: res.user.displayName ? res.user.displayName : "",
+        dob: "",
+        role: "user",
+      });
+
+      await setDoc(doc(db, "userChats", res.user.uid), {});
       navigate("/home");
     } catch (error) {
       console.log(error.message);
@@ -92,6 +111,8 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Group>
+
+              
 
               <div className="d-grid gap-2">
                 <Button variant="primary" type="Submit">
