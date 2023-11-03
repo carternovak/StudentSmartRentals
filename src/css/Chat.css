@@ -10,15 +10,15 @@
 
 .chat-users {
     background-color: white;
-    box-shadow: 0px 7px 20px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.25);
     border-radius: 28px;
+    width: 7%;
+    height: 90%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
-    width: 91%;
-    margin: 0 auto;
 }
 
 .chat-users img {
@@ -42,24 +42,16 @@
 
 }
 
-.messages {
+.chat {
     display: flex;
     flex-direction: column;
     margin: 20px auto;
     padding: 0 20px;
     width: 95%;
-    height: 90%;
-    overflow: scroll;
+    height: 80%;
+    overflow: auto;
 }
 
-.chat {
-    display: flex;
-    flex-direction: column;
-    margin: 20px auto;
-    width: 95%;
-    height: 80%;
-    overflow: hidden;
-}
 
 .chat p {
     width: fit-content;
@@ -67,80 +59,16 @@
     border-radius: 10px;
 }
 
-.message-container {
-    display: flex;
-    flex-direction: column; /* Stack messages vertically */
-    align-items: flex-start;
-}
-
-.message-owner {
-    justify-content: flex-end;
-}
-
-
-.message {
-    display: flex;
-    color: white;
-    float: left;
-    border-radius: 10px;
-    height: 60%;
-    align-content: center;
-    gap: 10px;
-}
-
-.messageContent {
-    height: 80%;
-}
-
-.message p {
+.msg {
     background-color: grey;
+    color: white;
 }
 
-.message-container-owner {
-    display: flex;
-    margin: 10px 0;
-}
-
-.timestamp {
-    text-align: right; /* Right-align timestamps */
-    margin-top: 5px;
-    font-size: 10px;
-    color: rgb(194, 194, 194)
-}
-
-.msg-owner {
-    display: flex;
-    flex-direction: row-reverse;
-}
-
-.owner {
-    display: flex;
-    background-color: white;
-    float: right;
-    margin-left: auto;
-    justify-content: flex-start;
-}
-
-.owner > .timestamp {
-    text-align: left;
-    align-self: flex-end;
-}
-
-.owner p {
+.user-msg {
     background-color: #d90d32;
     color: white;
-}
-
-.messageInfo {
-    width: 40px;
-    height: 40px;
-}
-
-.messageInfo img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 2px solid black;
+    float: right;
+    margin-left: auto;
 }
 
 .chat-input-box {
@@ -179,89 +107,4 @@
 
 #scroll-spot {
     margin-top: 60px;
-}
-
-.user-chat {
-    display: flex;
-    width: 100%;
-    padding: 0 10px;
-    transition: 0.2s ease-in-out;
-    border-radius: 28px;
-}
-
-.user-chat img {
-    margin-right: 10px;
-}
-
-.user-chat:hover {
-    background-color: #d90d32;
-    color: white
-}
-
-.user-chat span {
-    align-self: center;
-}
-
-.details {
-    align-self: center;
-}
-
-.selected-chat {
-    margin-bottom: 20px;
-    background-color: #d90d32;
-    color: white;
-    transition: 0.4s ease-in-out;
-}
-
-.selected-chat:hover {
-    transform: scale(1.1);
-}
-
-.sidebar {
-    height: 90%;
-    width: 33%;
-    margin-right: 20px;
-    max-height: 100%;
-    overflow: scroll;
-}
-
-.form-control {
-    border-radius: 0.375rem 0 0 0.375rem !important;
-}
-
-.search-input {
-    display: flex;
-    width: 90%;
-    margin: 0 auto;
-    margin-bottom: 15px !important;
-}
-
-.search-input:focus {
-    border: 1px solid #d90d32 !important;
-}
-
-.search-button {
-    display: flex;
-    width: 60px;
-    align-items: center;
-    justify-content: center;
-    background-color: #d90d32 !important;
-    border: none !important;
-    border-radius: 0 0.375rem 0.375rem 0 !important;
-}
-
-.search-button img {
-    width: 20px;
-    height: 20px;
-    justify-self: center;
-    align-self: center;
-}
-
-.no-chat-selected {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    font-size: 60px;
 }
