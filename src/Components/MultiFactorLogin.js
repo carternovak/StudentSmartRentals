@@ -16,11 +16,20 @@ const MultiFactorLogin = (props) => {
   const verifyOtp = async (e) => {
     e.preventDefault();
     setError("");
+    try {
     const cred = PhoneAuthProvider.credential(verificationId, otp);
     const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
     await resolver.resolveSignIn(multiFactorAssertion);
     navigate("/home");
+    } catch(err) {
+      console.log("Error: ", err);
+      setError("Invalid OTP. Please try again.");
+    }
   }
+
+  const handleRefresh = () => {
+    window.location.reload(); // Reload the page
+  };
 
   return (
     <>
@@ -38,7 +47,7 @@ const MultiFactorLogin = (props) => {
             </Form.Group>
             <div className="button-right">
               <Link to="/">
-                <Button variant="secondary">Cancel</Button>
+                <Button variant="secondary" onClick={handleRefresh}>Cancel</Button>
               </Link>
               &nbsp;
               <Button type="submit" variant="primary">
