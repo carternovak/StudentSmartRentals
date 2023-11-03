@@ -10,16 +10,13 @@ const Chats = () => {
     const [chats, setChats] = useState([]);
     const [uid, setUid] = useState("");
     const { user } = useUserAuth();
-    console.log("User: ", user);
     const { dispatch } = useContext(ChatContext);
 
     useEffect(() => {
         setUid(user.uid);
-        console.log("User UID: ", uid);
         const getAllChats = () => {
             if(user.uid) {
                 const unsub = onSnapshot(doc(db, "userChats", user.uid), (doc) => {
-                    console.log("Chats: ", chats);
                     setChats(doc.data());
                 });
 
@@ -33,8 +30,8 @@ const Chats = () => {
         }
     }, [user.uid, chats, uid]);
 
-    const handleSelect = (chat) => {
-        dispatch({type: "SELECT_CHAT", payload: chat});
+    const handleSelect = (u) => {
+        dispatch({type: "CHANGE_USER", payload: u});
     };
 
     return (

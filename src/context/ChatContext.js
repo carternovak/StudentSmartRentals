@@ -5,7 +5,6 @@ export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
     const { user } = useUserAuth();
-    console.log("Current chat user: ", user);
     const INIT_STATE = {
         chatId: "null",
         user: {},
@@ -13,7 +12,7 @@ export const ChatContextProvider = ({ children }) => {
 
     const chatReducer = (state, action) => {
         switch(action.type) {
-            case "SELECT_CHAT":
+            case "CHANGE_USER":
                 return {
                     user: action.payload,
                     chatId: user.uid > action.payload.uid ? user.uid + action.payload.uid : action.payload.uid + user.uid,

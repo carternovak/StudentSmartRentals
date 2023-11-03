@@ -2,8 +2,8 @@
     display: flex;
     flex-flow: column nowrap;
     height: 250px;
-    align-items: start;
-    justify-content: start;
+    align-items: flex-start;
+    justify-content: flex-start;
     padding: 60px;
     margin-bottom: 20px;
     border-radius: 25px;
