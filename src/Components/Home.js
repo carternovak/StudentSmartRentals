@@ -149,16 +149,24 @@ const Home = (props) => {
 
   // backend integration starts here
   // we will get ll the community data just iterate to show up the card details
-  const fetchAllCommunityData = async() => {
-    const {data} = await axios.get("http://localhost:5000/communityData/getAllCommunityData");
-    // console.log(data); 
-  }
-  useEffect(()=>{
-fetchAllCommunityData();
+
+  const fetchAllCommunityData = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:5000/communityData/getAllCommunityData");
+      // Handle the data received from the API
+      console.log(data);
+    } catch (error) {
+      // Handle errors here
+      console.error("Error fetching community data:", error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchAllCommunityData();
+  }, []); // Empty dependency array means this effect runs once after the initial render
 
 // backend integration ends here
 
-  })
   return (
     <>
       <Helmet>
