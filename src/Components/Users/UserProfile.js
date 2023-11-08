@@ -20,7 +20,7 @@ import {
   UserProfileInput,
 } from "./UserProfilePageContainer";
 let dummyUserProfile = {
-  name: "My",
+  displayName: "My",
   email: "My",
   phone: "",
   propertyId: "1234567890",
@@ -54,7 +54,7 @@ let dummyUserProfile = {
 const UserProfilePage = () => {
   const { user } = useUserAuth();
 
-  dummyUserProfile.name = user.displayName;
+  dummyUserProfile.displayName = user.displayName;
   //console.log(user.displayName);
   dummyUserProfile.dob = user.dob;
   dummyUserProfile.email = user.email;
@@ -65,6 +65,23 @@ const UserProfilePage = () => {
   const [isEditing, setIsEditing, isCreatingTicket] = useState(false);
   const [activePage, setActivePage] = useState("user-info");
   const [editedFields, setEditedFields] = useState({});
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const docSnapshot = await getDoc(doc(db, "users", user.uid));
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
+          setUserProfile(userData);
+        } else {
+          console.log("Document doesn't exist");
+        }
+      } catch (error) {
+        console.error("Error getting document:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user.uid]);
   // useEffect(() => {
   //   const fetchUserProfile = async () => {
   //     try {
@@ -82,7 +99,7 @@ const UserProfilePage = () => {
 
   //   fetchUserProfile();
   // }, []); // Empty dependency array ensures this effect runs once after the component mounts
-  console.log(userProfile);
+  //console.log(userProfile);
   const [newTicket, setNewTicket] = useState({
     heading: "",
     description: "",
@@ -250,11 +267,13 @@ const UserProfilePage = () => {
               {isEditing ? (
                 <input
                   type="text"
-                  value={userProfile.name}
+                  value={userProfile.displayName}
                   onChange={(e) => handleInputChange(e, "name")}
                 />
               ) : (
-                <UserProfileInfoValue>{userProfile.name}</UserProfileInfoValue>
+                <UserProfileInfoValue>
+                  {userProfile.displayName}
+                </UserProfileInfoValue>
               )}
             </UserProfileInfoContainer>
             <UserProfileInfoContainer>
