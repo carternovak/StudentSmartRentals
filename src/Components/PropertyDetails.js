@@ -8,13 +8,21 @@ const PropertyDetails = ({ property }) => {
       // backend integration starts here
   // we will get the community data requested by user when he clicks on a paticular id just get the id from user to show up the card details of particular community
   
-  const fetchOneCommunityData = async() => {
-    const {data} = await axios.get("http://localhost:5000/communityData/getAllCommunityData/1");
-    // console.log(data); 
-  }
-  useEffect(()=>{
+  const fetchOneCommunityData = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:5000/communityData/getAllCommunityData/1");
+      // Handle the data received from the API
+      console.log(data);
+    } catch (error) {
+      // Handle errors here
+      console.error("Error fetching community data:", error);
+    }
+  };
+  
+  useEffect(() => {
     fetchOneCommunityData();
-  })
+  }, []); // Empty dependency array means this effect runs once after the initial render
+  
 
 // backend integration ends here
 

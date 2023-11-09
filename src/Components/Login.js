@@ -33,9 +33,8 @@ const Login = () => {
             navigate("/home");
           })
           .catch(async function (error) {
-            console.log("Error: ", error);
             if (error.code === 'auth/multi-factor-auth-required') {
-              const newResolver = getMultiFactorResolver(auth, error);
+              const newResolver = await getMultiFactorResolver(auth, error);
               setResolver(newResolver);
               const phoneInfoOptions = {
                 multiFactorHint: newResolver.hints[0],
@@ -90,7 +89,8 @@ const Login = () => {
 
   return (
     <>
-      {!isVerifying ? <div className="login_container">
+    <div className="login_container">
+      {!isVerifying ? 
         <div className="login">
           <div className="p-4 box">
             <h2 className="mb-5 text-center">Log In</h2>
@@ -118,7 +118,6 @@ const Login = () => {
                 <Button variant="primary" type="Submit">
                   Log In
                 </Button>
-                <div id="recaptcha-container"></div>
               </div>
             </Form>
             <hr />
@@ -137,8 +136,11 @@ const Login = () => {
             Forgot Password? <Link to="/passwordreset">Reset Password</Link>
           </div>
         </div>
-      </div>
         : <MultiFactorLogin resolver={resolver} verificationId={verificationId} />}
+        <div id={isVerifying && "hide-captcha" ? "hide-captcha" : ""}>
+          <div id="recaptcha-container"></div>
+        </div>
+        </div>
     </>
   );
 };

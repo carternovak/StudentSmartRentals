@@ -53,4 +53,4 @@ app.use((err, req, res, next) => {
   res.send({ message: "Error occured", reason: err.message });
 });
 
-app.listen(5000, () => console.log("server is on port 3000"));
+app.listen(5000, () => console.log("server is on port 5000"));

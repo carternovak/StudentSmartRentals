@@ -43,7 +43,7 @@ export function UserAuthContextProvider({ children }) {
       "recaptcha-container",
       {}
     );
-    recaptchaVerifier.render();
+    //recaptchaVerifier.render();
     return recaptchaVerifier;
   }
 
