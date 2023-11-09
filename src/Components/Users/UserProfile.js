@@ -55,13 +55,11 @@ const UserProfilePage = () => {
   const { user } = useUserAuth();
 
   dummyUserProfile.displayName = user.displayName;
-  //console.log(user.displayName);
   dummyUserProfile.dob = user.dob;
   dummyUserProfile.email = user.email;
   dummyUserProfile.phone = user.phone;
   dummyUserProfile.address = user.address;
-  //console.log(dummyUserProfile);
-  const [userProfile, setUserProfile] = useState(dummyUserProfile);
+  const [userProfile, setUserProfile] = useState([]);
   const [isEditing, setIsEditing, isCreatingTicket] = useState(false);
   const [activePage, setActivePage] = useState("user-info");
   const [editedFields, setEditedFields] = useState({});
@@ -82,24 +80,7 @@ const UserProfilePage = () => {
 
     fetchUserProfile();
   }, [user.uid]);
-  // useEffect(() => {
-  //   const fetchUserProfile = async () => {
-  //     try {
-  //       const docSnapshot = await getDoc(doc(db, "users", user.uid));
-  //       if (docSnapshot.exists()) {
-  //         const userData = docSnapshot.data();
-  //         setUserProfile(userData);
-  //       } else {
-  //         console.log("Document doesn't exist");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error getting document:", error);
-  //     }
-  //   };
 
-  //   fetchUserProfile();
-  // }, []); // Empty dependency array ensures this effect runs once after the component mounts
-  //console.log(userProfile);
   const [newTicket, setNewTicket] = useState({
     heading: "",
     description: "",
@@ -114,9 +95,6 @@ const UserProfilePage = () => {
   };
 
   const postNewTicket = () => {
-    // Validate the input, e.g., ensure the fields are not empty
-
-    // Create a new maintenance ticket object
     const newMaintenanceRequest = {
       heading: newTicket.heading,
       description: newTicket.description,
@@ -125,10 +103,11 @@ const UserProfilePage = () => {
     };
 
     // Update the user's maintenance requests with the new ticket
+    // TODO: Need to change this logic as userprofile no longer has maintenanceRequest related attributes. Need to fetch from backend
     setUserProfile({
       ...userProfile,
       maintenanceRequests: [
-        ...userProfile.maintenanceRequests,
+        ...dummyUserProfile.maintenanceRequests,
         newMaintenanceRequest,
       ],
     });
@@ -181,49 +160,13 @@ const UserProfilePage = () => {
       return;
     }
 
-    // try {
-    // Create an object to hold the fields to update
-    // console.log("USER ID inside change function:" + user.uid);
-    //console.log(user);
-    // const updatedData = {
-    //   uid: user.uid,
-    //   displayName: "",
-    //   email: "",
-    //   dob: "",
-    //   phone: "",
-    // };
-
-    // Add fields from userProfile only if they are not null
-    // if (userProfile.displayName !== null) {
-    //   updatedData.displayName = userProfile.displayName;
-    // }
-
-    // if (userProfile.email !== null) {
-    //   updatedData.email = userProfile.email;
-    // }
-
-    // if (userProfile.phone !== null) {
-    //   updatedData.phone = userProfile.phone;
-    // }
-
-    // if (userProfile.dob !== null) {
-    //   updatedData.dob = userProfile.dob;
-    // }
-
-    // if (userProfile.address !== null) {
-    //   updatedData.address = userProfile.dob;
-    // }
-
-    // Check if there are fields to update
     const updatedData = {
       ...editedFields,
     };
 
     await updateDoc(doc(db, "users", user.uid), updatedData)
       .then(() => {
-        console.log("Firestore document updated with changes:", updatedData);
-        // Clear the editedFields object after saving
-        // setEditedFields({});
+        //Successful
       })
       .catch((error) => {
         console.error("Error updating Firestore document:", error);
@@ -268,7 +211,7 @@ const UserProfilePage = () => {
                 <input
                   type="text"
                   value={userProfile.displayName}
-                  onChange={(e) => handleInputChange(e, "name")}
+                  onChange={(e) => handleInputChange(e, "displayName")}
                 />
               ) : (
                 <UserProfileInfoValue>
@@ -327,11 +270,6 @@ const UserProfilePage = () => {
                 <UserProfileButton onClick={handleEditToggle}>
                   Edit
                 </UserProfileButton>
-                {/*<UserProfileButton
-                  onClick={() => setIsEditingPassword(!isEditingPassword)}
-                >
-                  Edit Password
-            </UserProfileButton>*/}
               </div>
             )}
           </UserProfileCard>
@@ -341,7 +279,7 @@ const UserProfilePage = () => {
           <UserProfileCard>
             <UserProfileTitle>Maintenance Requests</UserProfileTitle>
             <UserProfileList>
-              {userProfile.maintenanceRequests.map(
+              {dummyUserProfile.maintenanceRequests.map(
                 (maintenanceRequest, index) => (
                   <UserProfileListItem
                     key={index}
@@ -417,44 +355,18 @@ const UserProfilePage = () => {
             <UserProfileTitle>Lease</UserProfileTitle>
             <UserProfileList>
               <UserProfileListItem>
-                Start date: {userProfile.lease.startDate.toLocaleDateString()}
+                Start date:{" "}
+                {dummyUserProfile.lease.startDate.toLocaleDateString()}
               </UserProfileListItem>
               <UserProfileListItem>
-                End date: {userProfile.lease.endDate.toLocaleDateString()}
+                End date: {dummyUserProfile.lease.endDate.toLocaleDateString()}
               </UserProfileListItem>
               <UserProfileListItem>
-                Rent amount: ${userProfile.lease.rentAmount}
+                Rent amount: ${dummyUserProfile.lease.rentAmount}
               </UserProfileListItem>
             </UserProfileList>
           </UserProfileCard>
         )}
-        {/*isEditingPassword && (
-          <UserProfileCard>
-            <UserProfileTitle>Edit Password</UserProfileTitle>
-            <UserProfileInfoContainer>
-              <UserProfileInfoLabel>Current Password:</UserProfileInfoLabel>
-              <UserProfileInput
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-              />
-            </UserProfileInfoContainer>
-            <UserProfileInfoContainer>
-              <UserProfileInfoLabel>New Password:</UserProfileInfoLabel>
-              <UserProfileInput
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-            </UserProfileInfoContainer>
-            {!passwordMatch && (
-              <div style={{ color: "red" }}>Incorrect current password.</div>
-            )}
-            <UserProfileButton onClick={handlePasswordChange}>
-              Save Password
-            </UserProfileButton>
-          </UserProfileCard>
-            )*/}
       </UserProfilePageContainer>
     </div>
   );
