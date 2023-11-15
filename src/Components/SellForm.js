@@ -33,7 +33,7 @@ function SellForm() {
   const returnToHomePage = (e) => {
     e.preventDefault();
 
-    navigate("/home");
+    navigate("/");
   };
 
   const validateForm = () => {
@@ -92,85 +92,72 @@ function SellForm() {
 
   // Backend intgration starts here
   // this is the basic sructure of post data, we need to include some more form inputs to get the required data
-  
+
   const submitFormData = async () => {
     try {
       const dataToBeSent = {
-        "CommunityID": "3",
-        "CommunityName": "town and county",
-        "CommDistanceFromCollege": 2.5,
-        "CommStAddress": "123 Main St",
-        "CommCity": "Sample City",
-        "State": "Sample State",
-        "Zipcode": "12345",
-        "CommLocation": {
-            "latitude": 40.7128,
-            "longitude": -74.0060
+        CommunityID: "3",
+        CommunityName: "town and county",
+        CommDistanceFromCollege: 2.5,
+        CommStAddress: "123 Main St",
+        CommCity: "Sample City",
+        State: "Sample State",
+        Zipcode: "12345",
+        CommLocation: {
+          latitude: 40.7128,
+          longitude: -74.006,
         },
-        "BusesToCollege": [
-            6,
-            9,
-            1
+        BusesToCollege: [6, 9, 1],
+        CommunityRules: ["Rule1", "Rule2"],
+        CommunityFeatures: [
+          "Swimming Pool and Sundeck",
+          "Dogs and Cats are Welcome",
         ],
-        "CommunityRules": [
-            "Rule1",
-            "Rule2"
-        ],
-        "CommunityFeatures": [
-            "Swimming Pool and Sundeck",
-            "Dogs and Cats are Welcome"
-        ],
-        "CommApartments":
-            {
-                "ApartmentID": "A101",
-                "AptName": "Sample Apartment",
-                "AptUnits": 
-                    {
-                        "UnitNumber": "101",
-                        "UnitPrice": 1500,
-                        "Bedrooms": 2,
-                        "Bathrooms": 1,
-                        "SQFT": 1000,
-                        "IsAvailable": true,
-                        "Leaseperiod": 12,
-                        "UnitModeling": {
-                            "Old": true,
-                            "New": false,
-                            "remodeled": false
-                        },
-                        "Unit_Images": [
-                            "image1.jpg",
-                            "image2.jpg"
-                        ],
-                        "HomeTourLink": "http://example.com/tour",
-                        "UnitFeatures": [
-                            "Spacious Living Room",
-                            "Built-In Bookcases"
-                        ]
-                    }
-            }
-    };
-        
-      const response = await fetch('http://localhost:5000/communityData/postCommunityData', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
+        CommApartments: {
+          ApartmentID: "A101",
+          AptName: "Sample Apartment",
+          AptUnits: {
+            UnitNumber: "101",
+            UnitPrice: 1500,
+            Bedrooms: 2,
+            Bathrooms: 1,
+            SQFT: 1000,
+            IsAvailable: true,
+            Leaseperiod: 12,
+            UnitModeling: {
+              Old: true,
+              New: false,
+              remodeled: false,
+            },
+            Unit_Images: ["image1.jpg", "image2.jpg"],
+            HomeTourLink: "http://example.com/tour",
+            UnitFeatures: ["Spacious Living Room", "Built-In Bookcases"],
+          },
         },
-        body: JSON.stringify(dataToBeSent)
-      });
-  
+      };
+
+      const response = await fetch(
+        "http://localhost:5000/communityData/postCommunityData",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToBeSent),
+        }
+      );
+
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
-  
+
       const result = await response.json();
       console.log(result);
     } catch (error) {
       // Handle errors here
-      console.error('Error submitting form data:', error);
+      console.error("Error submitting form data:", error);
     }
   };
-  
 
   // Backend intgration ends here
   return (

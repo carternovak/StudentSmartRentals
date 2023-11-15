@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Alert } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import "react-phone-number-input/style.css";
-import { PhoneAuthProvider, PhoneMultiFactorGenerator } from 'firebase/auth';
+import { PhoneAuthProvider, PhoneMultiFactorGenerator } from "firebase/auth";
 import "../css/PhoneSignup.css";
 
 const MultiFactorLogin = (props) => {
@@ -17,15 +17,15 @@ const MultiFactorLogin = (props) => {
     e.preventDefault();
     setError("");
     try {
-    const cred = PhoneAuthProvider.credential(verificationId, otp);
-    const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
-    await resolver.resolveSignIn(multiFactorAssertion);
-    navigate("/home");
-    } catch(err) {
+      const cred = PhoneAuthProvider.credential(verificationId, otp);
+      const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
+      await resolver.resolveSignIn(multiFactorAssertion);
+      navigate("/");
+    } catch (err) {
       console.log("Error: ", err);
       setError("Invalid OTP. Please try again.");
     }
-  }
+  };
 
   const handleRefresh = () => {
     window.location.reload(); // Reload the page
@@ -47,7 +47,9 @@ const MultiFactorLogin = (props) => {
             </Form.Group>
             <div className="button-right">
               <Link to="/">
-                <Button variant="secondary" onClick={handleRefresh}>Cancel</Button>
+                <Button variant="secondary" onClick={handleRefresh}>
+                  Cancel
+                </Button>
               </Link>
               &nbsp;
               <Button type="submit" variant="primary">
