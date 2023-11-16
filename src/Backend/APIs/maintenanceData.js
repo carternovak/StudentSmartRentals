@@ -17,6 +17,7 @@ maintenanceAPI.post("/postMaintenanceData", async (req, res) => {
     issueType: req.body.issueType,
     description: req.body.description,
     isResolved: req.body.isResolved,
+    isApproved: req.body.isApproved,
     createdAt: req.body.createdAt,
     closedAt: req.body.closedAt,
   });
@@ -102,7 +103,9 @@ maintenanceAPI.put("/updateMaintenanceData/:ticketId", async (req, res) => {
         if (updatedetails.isResolved !== undefined) {
           ticket.isResolved = updatedetails.isResolved;
         }
-
+        if (updatedetails.isApproved !== undefined) {
+          ticket.isApproved = updatedetails.isApproved;
+        }
         if (updatedetails.createdAt !== undefined) {
           ticket.createdAt = new Date(updatedetails.createdAt);
         }

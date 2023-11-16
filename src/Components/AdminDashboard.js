@@ -24,8 +24,6 @@ const AdminDashboard = () => {
     };
 
     const confirmAdmin = (role) => {
-        console.log("USER: ", user);
-        console.log("USER NAME: ", user.displayName);
         if (role !== "admin") {
             navigate("/");
         }
@@ -36,6 +34,8 @@ const AdminDashboard = () => {
             const { data } = await axios.get("http://localhost:3001/maintenanceData/getMaintenanceData");
             const unresolvedTickets = data.filter(ticket => ticket.isResolved === false);
             const newResolvedTickets = data.filter(ticket => ticket.isResolved === true);
+            // console.log("Unresolved tickets:", unresolvedTickets);
+            // console.log("Resolved tickets:", newResolvedTickets);
             setMaintenanceTickets(unresolvedTickets);
             setResolvedTickets(newResolvedTickets);
         } catch (error) {
@@ -49,18 +49,9 @@ const AdminDashboard = () => {
         const confirmApprove = await window.confirm("Are you sure you want to aprove this request?")
         if (confirmApprove) {
             console.log("Approving ticket");
-
-        }
-        return;
-    }
-
-    const denyRequest = async (request) => {
-        // TODO: Delete ticket from backend
-        const confirmDelete = await window.confirm("Are you sure you want to deny this request?")
-        if (confirmDelete) {
-            console.log("Denying ticket");
             const dataToBeSent = {
                 isResolved: true,
+                isApproved: true,
                 closedAt: new Date(),
             };
             const response = await fetch(
@@ -74,7 +65,31 @@ const AdminDashboard = () => {
                 }
             );
             const data = await response.json();
-            console.log(data);
+        }
+        return;
+    }
+
+    const denyRequest = async (request) => {
+        // TODO: Delete ticket from backend
+        const confirmDelete = await window.confirm("Are you sure you want to deny this request?")
+        if (confirmDelete) {
+            console.log("Denying ticket");
+            const dataToBeSent = {
+                isResolved: true,
+                isApproved: false,
+                closedAt: new Date(),
+            };
+            const response = await fetch(
+                "http://localhost:3001/maintenanceData/updateMaintenanceData/" + request.ticketID,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(dataToBeSent),
+                }
+            );
+            const data = await response.json();
         }
         return;
     }
@@ -127,7 +142,7 @@ const AdminDashboard = () => {
 
                         <h2>Past Maintenence Requests</h2>
                         {resolvedTickets.map((ticket) => (
-                            <div className="past-request">
+                            <div className={`past-request ${ticket.isApproved ? "approved" : "denied"}`}>
                                 <div className="request-header">
                                     <h3>Apartment ID: {ticket.apartmentID}</h3>
                                     <p>{ticket.ticketID}</p>
@@ -139,6 +154,7 @@ const AdminDashboard = () => {
                                 <p>User: {ticket.userID}</p>
                                 <h4 style={{ "marginTop": "40px" }}>Description</h4>
                                 <p>{ticket.description ? ticket.description : "No description provided"}</p>
+                                {ticket.isApproved ? <p className="approved-text">Approved</p> : <p className="denied-text">Denied</p>}
                             </div>))}
                     </div>
                 </div>

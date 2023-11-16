@@ -32,21 +32,42 @@
 .maintenence-request {
     background-color: #FFEF9E;
     padding: 20px 60px;
-    margin: 40px 0;
-    border-radius: 86px;
+    margin: 40px 0; 
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 400;
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
 }
 
 .past-request {
-    background-color: #ffb69e;
     padding: 20px 60px;
     margin: 40px 0;
-    border-radius: 86px;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 400;
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+}
+
+.denied {
+    background-color: #ffb69e;
+}
+
+.denied-text {
+    background-color: #ff4444;
+    color: white;
+    width: fit-content;
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+
+.approved {
+    background-color: #caff9e;
+}
+
+.approved-text {
+    background-color: #479d00;
+    color: white;
+    width: fit-content;
+    padding: 10px 20px;
+    border-radius: 20px;
 }
 
 

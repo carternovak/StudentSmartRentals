@@ -13,6 +13,7 @@ const maintenanceTicketSchema = new Schema({
   issueType: String,
   description: String,
   isResolved: Boolean,
+  isApproved: Boolean,
   createdAt: Date,
   closedAt: Date,
 });
