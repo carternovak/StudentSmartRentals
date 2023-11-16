@@ -8,11 +8,14 @@ import { useNavigate } from "react-router";
 import { getDoc } from "firebase/firestore";
 import { doc } from "firebase/firestore";
 import { db } from "../firebase";
-
+import Modal from "react-bootstrap/Modal";
 function Nav() {
   const { user, logOut } = useUserAuth();
   const navigate = useNavigate();
-  const [userRole, setUserRole] = useState(""); // State to store the user role
+  const [userRole, setUserRole] = useState(() => {
+    // Load userRole from localStorage on component mount
+    return localStorage.getItem("userRole") || "";
+  }); // State to store the user role
 
   useEffect(() => {
     fetchUserRole();
@@ -25,6 +28,7 @@ function Nav() {
         const userData = docSnapshot.data();
         const role = userData.role;
         setUserRole(role); // Update the userRole state with the fetched role
+        localStorage.setItem("userRole", role);
       } else {
         console.log("Document doesn't exist");
       }
@@ -33,9 +37,14 @@ function Nav() {
     }
   };
 
+  const handleLogin = () => {
+    navigate("/login");
+  };
   const handleLogout = async () => {
     try {
+      localStorage.clear();
       await logOut();
+      setUserRole(""); // Reset userRole to an empty string upon logout
       navigate("/");
     } catch (error) {
       console.log(error.message);
@@ -47,49 +56,78 @@ function Nav() {
       <div className="nav-container">
         <div className="link-container">
           <ul className="nav-links">
-            <Link to="/rent">
-              <li>Rent</li>
-            </Link>
+            {userRole !== "" && (
+              <Link to="/rent">
+                <li>Rent</li>
+              </Link>
+            )}
             {userRole === "owner" && (
               <Link to="/sell">
                 <li>Sell</li>
               </Link>
             )}
-            <Link to="/iub-support">
-              <li>IUB Support</li>
-            </Link>
+            {userRole !== "" && (
+              <Link to="/iub-support">
+                <li>IUB Support</li>
+              </Link>
+            )}
           </ul>
         </div>
         <div className="link-container">
-          <img
-            src={Logo}
-            style={{ width: "40px", height: "40px" }}
-            alt="StudentSmart Rentals Logo"
-          />
+          <Link to="/">
+            <img
+              src={Logo}
+              style={{ width: "40px", height: "40px" }}
+              alt="StudentSmart Rentals Logo"
+            />
+          </Link>
         </div>
         <div className="link-container">
           <ul className="nav-links2">
-            <Link to="/help">
-              <li>Help</li>
-            </Link>
-            <Link to="/chat">
-              <li>Chat</li>
-            </Link>
-            <Link to="/profile">
-              <li>Profile</li>
-            </Link>
-            <Button
-              className="logout"
-              variant="primary"
-              onClick={handleLogout}
-              style={{
-                backgroundColor: "#d90d32",
-                color: "white",
-                border: "none",
-              }}
-            >
-              Logout
-            </Button>
+            {userRole !== "" && (
+              <Link to="/help">
+                <li>Help</li>
+              </Link>
+            )}
+            {userRole !== "" && (
+              <Link to="/chat">
+                <li>Chat</li>
+              </Link>
+            )}
+            {userRole !== "" && (
+              <Link to="/profile">
+                <li>Profile</li>
+              </Link>
+            )}
+            {userRole === "" ? (
+              <Button
+                className="login"
+                variant="primary"
+                onClick={handleLogin}
+                style={{
+                  backgroundColor: "#d90d32",
+                  color: "white",
+                  border: "none",
+                  maxWidth: "80px", // Set a minimum width for the button
+                  padding: "8px 16px", // Set padding to control the size
+                }}
+              >
+                Login
+              </Button>
+            ) : (
+              <Button
+                className="logout"
+                variant="primary"
+                onClick={handleLogout}
+                style={{
+                  backgroundColor: "#d90d32",
+                  color: "white",
+                  border: "none",
+                }}
+              >
+                Logout
+              </Button>
+            )}
           </ul>
         </div>
       </div>

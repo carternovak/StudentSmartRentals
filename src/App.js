@@ -9,7 +9,7 @@ import { ChatContextProvider } from "./context/ChatContext";
 import { UserAuthContextProvider } from "./context/UserAuthContext";
 import PasswordReset from "./Components/PasswordReset";
 import SellForm from "./Components/SellForm";
-import Chat from "./Components/Chat"
+import Chat from "./Components/Chat";
 import PhoneRegistration from "./Components/PhoneRegistration";
 import UserProfilePage from "./Components/Users/UserProfile";
 
@@ -21,14 +21,14 @@ function App() {
           <UserAuthContextProvider>
             <Routes>
               <Route
-                path="/home"
+                path="/"
                 element={
-                  <ProtectedRoute>
-                    <Home />
-                  </ProtectedRoute>
+                  // <ProtectedRoute>
+                  <Home />
+                  // </ProtectedRoute>
                 }
               />
-              <Route path="/" element={<Login />} />
+              <Route path="/login" element={<Login />} />
               <Route
                 path="/phonesignup"
                 element={
@@ -38,7 +38,14 @@ function App() {
                 }
               />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/enroll" element={<PhoneRegistration />} />
+              <Route
+                path="/enroll"
+                element={
+                  <ProtectedRoute>
+                    <PhoneRegistration />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/passwordreset" element={<PasswordReset />} />
               <Route
                 path="/sell"
@@ -51,12 +58,11 @@ function App() {
               <Route
                 path="/chat"
                 element={
-                  
                   <ProtectedRoute>
                     <ChatContextProvider>
                       <Chat />
                     </ChatContextProvider>
-                    </ProtectedRoute>
+                  </ProtectedRoute>
                 }
               />
               <Route
