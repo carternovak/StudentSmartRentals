@@ -57,11 +57,11 @@ function Nav() {
         <div className="link-container">
           <ul className="nav-links">
             {userRole !== "" && (
-              <Link to="/rent">
+              <Link to="/">
                 <li>Rent</li>
               </Link>
             )}
-            {userRole === "owner" && (
+            {(userRole === "owner" || userRole === "admin" ) && (
               <Link to="/sell">
                 <li>Sell</li>
               </Link>
@@ -69,6 +69,11 @@ function Nav() {
             {userRole !== "" && (
               <Link to="/iub-support">
                 <li>IUB Support</li>
+              </Link>
+            )}
+            {userRole === "admin" && (
+              <Link to="/admin">
+                <li>Admin</li>
               </Link>
             )}
           </ul>

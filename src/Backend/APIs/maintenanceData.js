@@ -100,7 +100,7 @@ maintenanceAPI.put("/updateMaintenanceData/:ticketId", async (req, res) => {
           ticket.description = updatedetails.description;
         }
         if (updatedetails.isResolved !== undefined) {
-          ticket.isResolved == "true" ? true : false;
+          ticket.isResolved = updatedetails.isResolved;
         }
 
         if (updatedetails.createdAt !== undefined) {
@@ -110,7 +110,7 @@ maintenanceAPI.put("/updateMaintenanceData/:ticketId", async (req, res) => {
         if (updatedetails.closedAt !== undefined) {
           ticket.closedAt = new Date(updatedetails.closedAt);
         }
-
+        
         const updateticket = await ticket.save();
         return updateticket;
       } else {
