@@ -1,3 +1,9 @@
+.admin-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .admin-container {
     width: 80vw;
     height: 100vh;
@@ -10,20 +16,23 @@
 
 .admin-button {
     margin-right: 10px;
+    margin-bottom: 0;
 }
 
 .button-container {
     display: flex;
     justify-content: space-between;
     flex-wrap: nowrap;
+    align-items: center;
 }
 
-.button-container p {
+.button-container #description {
     width: 75%;
+    margin-bottom: 0;
 }
 
 /* Container for all requests */
-.maintenence-requests {
+.requests {
     margin: 0 auto;
     width: 70%;
 }
@@ -56,6 +65,8 @@
     width: fit-content;
     padding: 10px 20px;
     border-radius: 20px;
+    width: fit-content;
+    margin-bottom: 0;
 }
 
 .approved {
@@ -68,6 +79,7 @@
     width: fit-content;
     padding: 10px 20px;
     border-radius: 20px;
+    margin-bottom: 0;
 }
 
 
@@ -77,11 +89,6 @@ p {
 
 h3 {
     font-weight: bolder !important;
-}
-
-.request-buttons {
-    margin-bottom: 10px;
-    align-self: flex-end;
 }
 
 .request-date {
