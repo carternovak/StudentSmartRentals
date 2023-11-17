@@ -3,14 +3,22 @@ import "../css/AdminDashboard.css";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import Loading from "../images/loading.gif";
+import Search from "./Search";
 
 const MaintenenceRequests = () => {
     const [maintenanceTickets, setMaintenanceTickets] = useState([]);
     const [resolvedTickets, setResolvedTickets] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+    const [resolvedSearchResults, setResolvedSearchResults] = useState([]);
 
     useEffect(() => {
         fetchMaintenanceTickets();
     }, []);
+
+    useEffect(() => {
+        filterTickets();
+    }, [maintenanceTickets, resolvedTickets, searchQuery]);
 
     const fetchMaintenanceTickets = async () => {
         try {
@@ -140,14 +148,43 @@ const MaintenenceRequests = () => {
         return;
     }
 
+    // All search related functions
+    function handleSearchInputChange(event) {
+        setSearchQuery(event.target.value);
+    }
+    function handleKeyPress() {
+        if (searchResults.length > 0) searchResults = filterTickets();
+    }
+
+    function filterTickets() {
+        const filteredMaintenanceTickets = maintenanceTickets.filter((ticket) => {
+            return ticket.apartmentID.toLowerCase().includes(searchQuery.toLowerCase());
+        });
+
+        const filteredResolvedTickets = resolvedTickets.filter((ticket) => {
+            return ticket.apartmentID.toLowerCase().includes(searchQuery.toLowerCase());
+        });
+
+        setSearchResults(filteredMaintenanceTickets);
+        setResolvedSearchResults(filteredResolvedTickets);
+    }
+
     return (
         <>
-            {maintenanceTickets ? (
-                maintenanceTickets.map((ticket) => (
+            <Search
+                id="search"
+                searchQuery={searchQuery}
+                handleSearchInputChange={handleSearchInputChange}
+                searchResults={searchResults}
+                handleKeyPress={handleKeyPress}
+                placeholderText={"Search by apartment ID"}
+            />
+            {searchResults ? (
+                searchResults.map((ticket) => (
                     <div className="maintenence-request">
                         <div className="request-header">
                             <h3>Apartment ID: {ticket.apartmentID}</h3>
-                            <p>{ticket.ticketID}</p>
+                            <p>Issue No: {ticket.ticketID}</p>
                         </div>
                         <p className="request-date">{parseDate(ticket.createdAt)}</p>
                         <p>Type: {ticket.issueType}</p>
@@ -162,31 +199,31 @@ const MaintenenceRequests = () => {
                                 <Button variant="danger" onClick={() => denyRequest(ticket)} className="admin-button">Deny</Button>
                             </div>
                         </div>
-                    </div>))) : (<img src={Loading} alt="Loading" style={{margin: "0 auto", display: "flex"}} />)}
+                    </div>))) : (<img src={Loading} alt="Loading" style={{ margin: "0 auto", display: "flex" }} />)}
 
             <h2>Past Maintenence Requests</h2>
-            {resolvedTickets ? (
-            resolvedTickets.map((ticket) => (
-                <div className={`past-request ${ticket.isApproved ? "approved" : "denied"}`}>
-                    <div className="request-header">
-                        <h3>Apartment ID: {ticket.apartmentID}</h3>
-                        <p>{ticket.ticketID}</p>
-                    </div>
-                    <p className="request-date">{parseDate(ticket.createdAt)}</p>
-                    <p>Type: {ticket.issueType}</p>
-                    <p>Unit Number: {ticket.unitNumber}</p>
-                    <p>Owner: {ticket.ownerID}</p>
-                    <p>User: {ticket.userID}</p>
-                    <h4 style={{ "marginTop": "40px" }}>Description</h4>
-                    <p>{ticket.description ? ticket.description : "No description provided"}</p>
-                    <div className="button-container">
-                        {ticket.isApproved ? <p className="approved-text">Approved</p> : <p className="denied-text">Denied</p>}
-                        <div className="request-buttons">
-                            <Button variant="primary" onClick={() => reopenRequest(ticket)} className="admin-button">Reopen</Button>
-                            <Button variant="danger" onClick={() => deleteRequest(ticket)} className="admin-button">Delete</Button>
+            {resolvedSearchResults ? (
+                resolvedSearchResults.map((ticket) => (
+                    <div className={`past-request ${ticket.isApproved ? "approved" : "denied"}`}>
+                        <div className="request-header">
+                            <h3>Apartment ID: {ticket.apartmentID}</h3>
+                            <p>Issue No: {ticket.ticketID}</p>
                         </div>
-                    </div>
-                </div>))) : (<img src={Loading} alt="Loading" style={{margin: "0 auto", display: "flex"}} />)}
+                        <p className="request-date">{parseDate(ticket.createdAt)}</p>
+                        <p>Type: {ticket.issueType}</p>
+                        <p>Unit Number: {ticket.unitNumber}</p>
+                        <p>Owner: {ticket.ownerID}</p>
+                        <p>User: {ticket.userID}</p>
+                        <h4 style={{ "marginTop": "40px" }}>Description</h4>
+                        <p>{ticket.description ? ticket.description : "No description provided"}</p>
+                        <div className="button-container">
+                            {ticket.isApproved ? <p className="approved-text">Approved</p> : <p className="denied-text">Denied</p>}
+                            <div className="request-buttons">
+                                <Button variant="primary" onClick={() => reopenRequest(ticket)} className="admin-button">Reopen</Button>
+                                <Button variant="danger" onClick={() => deleteRequest(ticket)} className="admin-button">Delete</Button>
+                            </div>
+                        </div>
+                    </div>))) : (<img src={Loading} alt="Loading" style={{ margin: "0 auto", display: "flex" }} />)}
         </>
     )
 }
