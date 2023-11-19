@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import "../css/Nav.css";
-import Logo from "../images/LogoWithoytBG.png";
+import Logo from "../images/logo.png";
 import { useUserAuth } from "../context/UserAuthContext";
 import { useNavigate } from "react-router";
 import { getDoc } from "firebase/firestore";
@@ -77,7 +77,7 @@ function Nav() {
           <Link to="/">
             <img
               src={Logo}
-              style={{ width: "40px", height: "40px" }}
+              style={{ width: "350px", height: "55px" }}
               alt="StudentSmart Rentals Logo"
             />
           </Link>
