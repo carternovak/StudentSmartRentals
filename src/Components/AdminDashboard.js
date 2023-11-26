@@ -43,7 +43,7 @@ const AdminDashboard = () => {
                 <div className="admin-content">
                     <div className="requests">
                         <div className="admin-bar">
-                            {usingAdView ? <h2>Open Advertisement Requests</h2> : <h2>Open Maintenence Requests</h2>}
+                            {usingAdView ? <h2>Open Property Requests</h2> : <h2>Open Maintenence Requests</h2>}
                             <Switch 
                                 onChange={toggleView} 
                                 checked={usingAdView} 

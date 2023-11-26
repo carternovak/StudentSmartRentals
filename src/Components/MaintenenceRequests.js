@@ -22,7 +22,7 @@ const MaintenenceRequests = () => {
 
     const fetchMaintenanceTickets = async () => {
         try {
-            const { data } = await axios.get("http://localhost:3001/maintenanceData/getMaintenanceData");
+            const { data } = await axios.get("http://localhost:5000/maintenanceData/getMaintenanceData");
             const unresolvedTickets = data.filter(ticket => ticket.isResolved === false);
             const newResolvedTickets = data.filter(ticket => ticket.isResolved === true);
             // console.log("Unresolved tickets:", unresolvedTickets);
@@ -46,7 +46,7 @@ const MaintenenceRequests = () => {
                 closedAt: new Date(),
             };
             const response = await fetch(
-                "http://localhost:3001/maintenanceData/updateMaintenanceData/" + request.ticketID,
+                "http://localhost:5000/maintenanceData/updateMaintenanceData/" + request.ticketID,
                 {
                     method: "PUT",
                     headers: {
@@ -72,7 +72,7 @@ const MaintenenceRequests = () => {
                 closedAt: new Date(),
             };
             const response = await fetch(
-                "http://localhost:3001/maintenanceData/updateMaintenanceData/" + request.ticketID,
+                "http://localhost:5000/maintenanceData/updateMaintenanceData/" + request.ticketID,
                 {
                     method: "PUT",
                     headers: {
@@ -109,7 +109,7 @@ const MaintenenceRequests = () => {
         if (confirmDelete) {
             console.log("Deleting ticket");
             const response = await fetch(
-                "http://localhost:3001/maintenanceData/deleteMaintenanceData/" + request.ticketID,
+                "http://localhost:5000/maintenanceData/deleteMaintenanceData/" + request.ticketID,
                 {
                     method: "DELETE",
                     headers: {
@@ -133,7 +133,7 @@ const MaintenenceRequests = () => {
                 closedAt: undefined,
             };
             const response = await fetch(
-                "http://localhost:3001/maintenanceData/updateMaintenanceData/" + request.ticketID,
+                "http://localhost:5000/maintenanceData/updateMaintenanceData/" + request.ticketID,
                 {
                     method: "PUT",
                     headers: {

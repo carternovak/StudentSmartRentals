@@ -1,3 +1,39 @@
+.apartments-container {
+    margin-top: 40px !important;
+    width: 100%;
+}
+
+.bus {
+    display: flex;
+    flex-direction: row;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    width: 50px;
+    height: 50px;
+    align-content: center;
+    justify-content: center;
+    margin-left: 20px;
+}
+
+.bus p {
+    margin: 0;
+    padding: 0;
+    align-self: center;
+}
+
+.buses {
+    display: flex;
+    height: 60px;
+    justify-content: center;
+    align-items: center;
+}
+
+.map-container {
+    border: 5px #d90d32 solid;
+    height: fit-content;
+}
+
 .property {
     display: flex;
     flex-flow: column nowrap;
@@ -15,6 +51,14 @@
 
 .property:hover {
     transform: scale(1.1);
+    border: 5px solid #d90d32;
+}
+
+.property-box {
+}
+
+.property_container {
+    width: 100%;
 }
 
 .property-name {
@@ -25,20 +69,74 @@
 
 }
 
+.rule {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: #d90d32;
+    color: white;
+    width: fit-content;
+}
+
+.feature {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: rgb(36, 159, 246);
+    color: white;
+    width: fit-content;
+}
+
+.search-results {
+    margin-bottom: 100px;
+}
+
 .selected {
-    margin: 10px 0;
+    margin: 0;
     height: 100%;
     transition: all 0.2s ease-in;
+    border-radius: 0;
+    padding-top: 20px !important;
+}
+
+.selected:hover {
+    transform: none;
+    border: 5px solid #d90d32;
 }
 
 .selected>div {
     height: 100%;
+    text-align: left;
+}
+
+.selected-container {
+    width: 50% !important;
+    padding-left: 1rem;
 }
 
 .box>.selected {
     width: 100%;
+    margin-top: 0 !important;
 }
 
 .hidden {
     display: none;
+}
+
+.unit {
+    padding: 20px;
+    box-shadow: 0px 10px 14px -6px rgba(0,0,0,0.75);
+}
+
+.unit-images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.unit img {
+    margin-right: 40px;
+    margin-top: 20px;
+    max-height: 1000px;
 }

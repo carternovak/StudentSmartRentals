@@ -13,7 +13,7 @@ const AdRequests = () => {
 
     const fetchAds = async () => {
         try {
-            const { data } = await axios.get("http://localhost:3001/adData/getAdData");
+            const { data } = await axios.get("http://localhost:5000/adData/getAdData");
             const unresolvedAds = data.filter(ad => ad.isResolved === false);
             const newResolvedAds = data.filter(ad => ad.isResolved === true);
             // console.log("Unresolved tickets:", unresolvedTickets);
@@ -37,7 +37,7 @@ const AdRequests = () => {
                 closedAt: new Date(),
             };
             const response = await fetch(
-                "http://localhost:3001/adData/updateAdData/" + request.adID,
+                "http://localhost:5000/adData/updateAdData/" + request.adID,
                 {
                     method: "PUT",
                     headers: {
@@ -63,7 +63,7 @@ const AdRequests = () => {
                 closedAt: new Date(),
             };
             const response = await fetch(
-                "http://localhost:3001/adData/updateAdData/" + request.adID,
+                "http://localhost:5000/adData/updateAdData/" + request.adID,
                 {
                     method: "PUT",
                     headers: {
@@ -116,7 +116,7 @@ const AdRequests = () => {
                     </div>
                 </div>))}
 
-            <h2>Past Advertisement Requests</h2>
+            <h2>Past Property Requests</h2>
             {resolvedAds.map((ad) => (
                 <div className={`past-request ${ad.isApproved ? "approved" : "denied"}`}>
                     <div className="request-header">
