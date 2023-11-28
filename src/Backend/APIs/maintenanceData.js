@@ -17,6 +17,7 @@ maintenanceAPI.post("/postMaintenanceData", async (req, res) => {
     issueType: req.body.issueType,
     description: req.body.description,
     isResolved: req.body.isResolved,
+    isApproved: req.body.isApproved,
     createdAt: req.body.createdAt,
     closedAt: req.body.closedAt,
   });
@@ -100,9 +101,11 @@ maintenanceAPI.put("/updateMaintenanceData/:ticketId", async (req, res) => {
           ticket.description = updatedetails.description;
         }
         if (updatedetails.isResolved !== undefined) {
-          ticket.isResolved == "true" ? true : false;
+          ticket.isResolved = updatedetails.isResolved;
         }
-
+        if (updatedetails.isApproved !== undefined) {
+          ticket.isApproved = updatedetails.isApproved;
+        }
         if (updatedetails.createdAt !== undefined) {
           ticket.createdAt = new Date(updatedetails.createdAt);
         }
@@ -110,7 +113,7 @@ maintenanceAPI.put("/updateMaintenanceData/:ticketId", async (req, res) => {
         if (updatedetails.closedAt !== undefined) {
           ticket.closedAt = new Date(updatedetails.closedAt);
         }
-
+        
         const updateticket = await ticket.save();
         return updateticket;
       } else {

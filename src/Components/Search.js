@@ -6,6 +6,7 @@ function Search({
   handleSearchInputChange,
   searchResults,
   handleKeyPress,
+  placeholderText,
 }) {
   const onKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -19,7 +20,7 @@ function Search({
         <Form.Control
           type="text"
           onChange={handleSearchInputChange}
-          placeholder="Search apartments"
+          placeholder={placeholderText ? placeholderText : "Search apartments"}
           value={searchQuery}
           className="w-100"
           onKeyDown={onKeyDown}

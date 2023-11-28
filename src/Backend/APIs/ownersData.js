@@ -17,7 +17,7 @@ ownerAPI.post("/postOwnerData", async (req, res) => {
         UnitOwnerName: req.body.UnitOwner.AptUnit.UnitOwnerName,
         UnitOwnerEmail: req.body.UnitOwner.AptUnit.UnitOwnerEmail,
         UnitOwnerPhone: req.body.UnitOwner.AptUnit.UnitOwnerPhone,
-        UnitOwnerAddress: req.body.UnitOwner.AptUnit.UnitOwnerPhone,
+        UnitOwnerAddress: req.body.UnitOwner.AptUnit.UnitOwnerAddress,
       },
     },
   });

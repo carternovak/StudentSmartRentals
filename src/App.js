@@ -12,6 +12,7 @@ import SellForm from "./Components/SellForm";
 import Chat from "./Components/Chat";
 import PhoneRegistration from "./Components/PhoneRegistration";
 import UserProfilePage from "./Components/Users/UserProfile";
+import AdminDashboard from "./Components/AdminDashboard";
 
 function App() {
   return (
@@ -70,6 +71,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <UserProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <AdminDashboard />
                   </ProtectedRoute>
                 }
               />

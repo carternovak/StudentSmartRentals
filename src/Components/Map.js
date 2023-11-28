@@ -29,25 +29,24 @@ const Map = (props) => {
     var marker = null
     properties.map((property) => (
       marker = new maps.Marker({
-        position: { lat: property.lat, lng: property.lng },
+        position: { lat: property.CommLocation.latitude, lng: property.CommLocation.longitude },
         map,
         icon: MarkerIcon,
-        title: `${property.name}`,
+        title: `${property.CommunityName}`,
         label: {
-          text: `${property.name}`,
+          text: `${property.CommunityName}`,
           color: 'white',
           fontSize: '12px',
           fontWeight: 'regular',
           className: 'marker-position',
       },
         }),
-        console.log(marker.position.lat),
         newMarkers.push(marker)
       
     ));
 
     newMarkers.forEach(marker => {
-      if(marker.title === selectedProperty.name) {
+      if(marker.title === selectedProperty.CommunityName) {
         marker.setLabel({
           text: `${marker.title}`,
           color: '#d90d32',
@@ -58,8 +57,6 @@ const Map = (props) => {
       }
     });
 
-    console.log(newMarkers);
-    
     setMarkers(newMarkers);
   };
 
@@ -86,13 +83,9 @@ const Map = (props) => {
   //   getUserLocation(); // Call this when the component mounts to get the user's location
   // }, []);
 
-  
-
-  console.log(props.selectedProperty.latitude);
-  console.log("Lat: " + properties[0].lat);
   return (
     // Important! Always set the container height explicitly
-    <div style={{ height: '100vh', maxHeight: '600px' }}>
+    <div style={{ height: '100vh', maxHeight: '600px', width: '600px' }}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: "AIzaSyDMgRIDq561DGmjRL8g0U4k6K7JXS_PUgc" }}
         defaultCenter={defaultProps.center}
@@ -101,7 +94,7 @@ const Map = (props) => {
         yesIWantToUseGoogleMapApiInternals
         zoom={17}
         onGoogleApiLoaded={({map, maps}) => renderMarkers(map, maps)}
-        draggable={false}
+        
       >
         
       </GoogleMapReact>
