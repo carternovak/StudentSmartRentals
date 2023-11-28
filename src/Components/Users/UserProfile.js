@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Nav from "../Nav";
 import "../../css/Home.css";
 import { useUserAuth } from "../../context/UserAuthContext";
@@ -19,6 +20,7 @@ import {
   UserProfileListItem,
   UserProfileInput,
 } from "./UserProfilePageContainer";
+import PropertyDetails from "../PropertyDetails";
 let dummyUserProfile = {
   displayName: "My",
   email: "My",
@@ -27,16 +29,32 @@ let dummyUserProfile = {
   password: "1234",
   maintenanceRequests: [
     {
-      heading: "leaky faucet",
-      description: "Fix the leaky faucet in the kitchen sink.",
-      status: "Pending",
-      createdAt: new Date(),
+      apartmentID:"1P"
+      ,closedAt: "2023-10-30T08:00:00.000Z"
+      ,communityID: "1"
+      ,createdAt: "2023-10-30T08:00:00.000Z"
+      ,description: "Leak in the bathroom"
+      ,isResolved: false
+      ,issueType: "Plumbing"
+      ,ownerID: "owner123"
+      ,ticketID: "ticket789"
+      ,unitID: "1P3"
+      ,unitNumber: "3"
+      ,userID: "1U"
     },
     {
-      heading: "broken lightbulb",
-      description: "Replace the broken lightbulb in the living room.",
-      status: "Completed",
-      createdAt: new Date(),
+      apartmentID:"1P"
+      ,closedAt: "2023-10-30T08:00:00.000Z"
+      ,communityID: "1"
+      ,createdAt: "2023-10-30T08:00:00.000Z"
+      ,description: "Leak in the bathroom"
+      ,isResolved: true
+      ,issueType: "Plumbing"
+      ,ownerID: "owner123"
+      ,ticketID: "ticket789"
+      ,unitID: "1P3"
+      ,unitNumber: "3"
+      ,userID: "1U"
     },
   ],
   lease: {
@@ -63,13 +81,16 @@ const UserProfilePage = () => {
   const [isEditing, setIsEditing, isCreatingTicket] = useState(false);
   const [activePage, setActivePage] = useState("user-info");
   const [editedFields, setEditedFields] = useState({});
+  const [maintenanceData, setMaintenanceData] = useState([]);
+  const [userPropertyDetails, setUserPropertDetails] = useState([]);
+  const [userData, setUserData] = useState([]);
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const docSnapshot = await getDoc(doc(db, "users", user.uid));
         if (docSnapshot.exists()) {
-          const userData = docSnapshot.data();
-          setUserProfile(userData);
+          const usrData = docSnapshot.data();
+          setUserProfile(usrData);
         } else {
           console.log("Document doesn't exist");
         }
@@ -77,12 +98,45 @@ const UserProfilePage = () => {
         console.error("Error getting document:", error);
       }
     };
-
+    const fetchUserPropertyDetails= async () => {
+      try {
+        const { data } = await axios.get("http://localhost:5000/userData/getUserData/1U");
+        // Handle the data received from the API
+        console.log(data);
+        setUserData(data)
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching user data:", error);
+      }
+      try {
+        const { data } = await axios.get("http://localhost:5000/communityData/getAllCommunityData/"+ userData.CommunityID);
+        // Handle the data received from the API
+        console.log(data);
+        setUserPropertDetails(data)
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching property data:", error);
+      }
+    };
+    const fetchAllMaintainanceTickets = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:5000/maintenanceData/getMaintenanceData");
+        // Handle the data received from the API
+        console.log(data);
+        setMaintenanceData(data)
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching community data:", error);
+      }
+    }
     fetchUserProfile();
+    fetchUserPropertyDetails();
+    fetchAllMaintainanceTickets();
+
   }, [user.uid]);
 
   const [newTicket, setNewTicket] = useState({
-    heading: "",
+    issueType: "",
     description: "",
   });
   const [isAddingTicket, setIsAddingTicket] = useState(false);
@@ -94,32 +148,56 @@ const UserProfilePage = () => {
     });
   };
 
-  const postNewTicket = () => {
-    const newMaintenanceRequest = {
-      heading: newTicket.heading,
-      description: newTicket.description,
-      status: "Pending",
-      createdAt: new Date(),
-    };
+  const postNewTicket= async () =>  {
+    try {
+      const newMaintenanceRequest = {
+        apartmentID: maintenanceData[0].apartmentID
+        ,closedAt: null
+        ,communityID: maintenanceData[0].communityID
+        ,createdAt: new Date()
+        ,description: newTicket.description
+        ,isResolved: false
+        ,issueType: newTicket.issueType
+        ,ownerID: maintenanceData[0].ownerID
+        ,ticketID: maintenanceData[maintenanceData.length -1].ticketID +'1'
+        ,unitID: maintenanceData[0].unitID
+        ,unitNumber:  maintenanceData[0].unitNumber
+        ,userID:  maintenanceData[0].userID
+      };
 
-    // Update the user's maintenance requests with the new ticket
-    // TODO: Need to change this logic as userprofile no longer has maintenanceRequest related attributes. Need to fetch from backend
-    setUserProfile({
-      ...userProfile,
-      maintenanceRequests: [
-        ...dummyUserProfile.maintenanceRequests,
-        newMaintenanceRequest,
-      ],
-    });
+      const response = await fetch('http://localhost:5000/maintenanceData/postMaintenanceData', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(newMaintenanceRequest)
+        });
+    
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+    
+        const result = await response.json();
+        console.log(result);
+        // Update the user's maintenance requests with the new ticket
+        // TODO: Need to change this logic as userprofile no longer has maintenanceRequest related attributes. Need to fetch from backend
+        setMaintenanceData({
+          ...maintenanceData,
+          newMaintenanceRequest
+        })
 
-    // Clear the form and exit "adding ticket" mode
-    setNewTicket({
-      heading: "",
-      description: "",
-    });
-    setIsAddingTicket(false);
+        // Clear the form and exit "adding ticket" mode
+        setNewTicket({
+          issueType: "",
+          description: "",
+        });
+        setIsAddingTicket(false);
+    } catch (error) {
+      // Handle errors here
+      console.error('Error submitting form newMaintenanceRequest:', error);
+    }
   };
-
+  
   const handlePageChange = (page) => {
     setIsEditing(false); // Close editing when switching pages
     setActivePage(page);
@@ -279,15 +357,15 @@ const UserProfilePage = () => {
           <UserProfileCard>
             <UserProfileTitle>Maintenance Requests</UserProfileTitle>
             <UserProfileList>
-              {dummyUserProfile.maintenanceRequests.map(
+              {maintenanceData.map(
                 (maintenanceRequest, index) => (
                   <UserProfileListItem
                     key={index}
                     style={{
                       background:
-                        maintenanceRequest.status === "Pending"
+                        maintenanceRequest.isResolved === false
                           ? "#e6f7ff"
-                          : maintenanceRequest.status === "Completed"
+                          : maintenanceRequest.isResolved === true
                           ? "#c8e6c9"
                           : "white",
                       border: "1px solid #ccc",
@@ -296,9 +374,9 @@ const UserProfilePage = () => {
                   >
                     <div>
                       <div>
-                        <UserProfileInfoLabel>Heading:</UserProfileInfoLabel>
+                        <UserProfileInfoLabel>Issue Type:</UserProfileInfoLabel>
                         <UserProfileInfoValue>
-                          {maintenanceRequest.heading}
+                          {maintenanceRequest.issueType}
                         </UserProfileInfoValue>
                       </div>
                       <div>
@@ -312,7 +390,7 @@ const UserProfilePage = () => {
                       <div>
                         <UserProfileInfoLabel>Status:</UserProfileInfoLabel>
                         <UserProfileInfoValue>
-                          {maintenanceRequest.status}
+                          {maintenanceRequest.isResolved === false ? "Pending" : "Completed"}
                         </UserProfileInfoValue>
                       </div>
                     </div>
@@ -354,16 +432,34 @@ const UserProfilePage = () => {
           <UserProfileCard>
             <UserProfileTitle>Lease</UserProfileTitle>
             <UserProfileList>
-              <UserProfileListItem>
-                Start date:{" "}
-                {dummyUserProfile.lease.startDate.toLocaleDateString()}
-              </UserProfileListItem>
-              <UserProfileListItem>
-                End date: {dummyUserProfile.lease.endDate.toLocaleDateString()}
-              </UserProfileListItem>
-              <UserProfileListItem>
-                Rent amount: ${dummyUserProfile.lease.rentAmount}
-              </UserProfileListItem>
+            <UserProfileInfoContainer>
+              <UserProfileInfoLabel>Property Name:</UserProfileInfoLabel>
+              <UserProfileInfoValue>{userData.CommunityName}</UserProfileInfoValue>
+            </UserProfileInfoContainer>
+            <UserProfileInfoContainer>
+              <UserProfileInfoLabel>Apartment Name:</UserProfileInfoLabel>
+              <UserProfileInfoValue>{userData.Apartment.ApartmentName}</UserProfileInfoValue>
+            </UserProfileInfoContainer>
+            <UserProfileInfoContainer>
+              <UserProfileInfoLabel>Unit Number:</UserProfileInfoLabel>
+              <UserProfileInfoValue>{userData.Apartment.Unit.UnitNumber}</UserProfileInfoValue>
+            </UserProfileInfoContainer>
+            <UserProfileInfoContainer>
+              <UserProfileInfoLabel>Address:</UserProfileInfoLabel>
+              <UserProfileInfoValue>{userPropertyDetails.CommStAddress} , {userPropertyDetails.CommCity}, {userPropertyDetails.State}, {userPropertyDetails.Zipcode} </UserProfileInfoValue>
+            </UserProfileInfoContainer>
+            <UserProfileInfoContainer>
+              <UserProfileInfoLabel>Lease Start Date:</UserProfileInfoLabel>
+              <UserProfileInfoValue>{dummyUserProfile.lease.startDate.toLocaleDateString()}</UserProfileInfoValue>
+            </UserProfileInfoContainer>
+            <UserProfileInfoContainer>
+              <UserProfileInfoLabel>Lease End Date:</UserProfileInfoLabel>
+              <UserProfileInfoValue>{dummyUserProfile.lease.endDate.toLocaleDateString()}</UserProfileInfoValue>
+            </UserProfileInfoContainer>
+            <UserProfileInfoContainer>
+              <UserProfileInfoLabel>Rent:</UserProfileInfoLabel>
+              <UserProfileInfoValue>{userPropertyDetails.CommApartments.AptUnits.UnitPrice}</UserProfileInfoValue>
+            </UserProfileInfoContainer>
             </UserProfileList>
           </UserProfileCard>
         )}
