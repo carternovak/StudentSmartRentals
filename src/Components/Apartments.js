@@ -1,47 +1,60 @@
-import React from 'react';
-import { Link } from "react-router-dom";
-import { Button } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+
+import Unit from './Unit';
+import "react-image-gallery/styles/css/image-gallery.css";
 import "../css/Property.css";
+import axios from "axios";
 
-const Apartments = ({selectedProperty}) => {
+const Apartments = ({ selectedProperty }) => {
+  const [owners, setOwners] = useState(null);
+  const [owner, setOwner] = useState(null);
+  const [unitOwner, setUnitOwner] = useState(null);
 
-    return (
-        <div className="apartments-container">
-                <>
-                  <h2 className="text-center">Apartments</h2>
-                  <div className="apartment">
-                    <h3>{selectedProperty.CommApartments.AptName}</h3>
-                    <div className="unit">
-                    <Button 
-                      className="availability"
-                      variant={selectedProperty.CommApartments.AptUnits.IsAvailable ? "success" : "danger"}
-                    >
-                      {selectedProperty.CommApartments.AptUnits.IsAvailable ? "Available" : "Unavailable"}
-                    </Button>
-                      <h4>{selectedProperty.CommApartments.AptUnits.UnitNumber}</h4>
-                      <p style={{color: "#d90d32"}}>${selectedProperty.CommApartments.AptUnits.UnitPrice}</p>
-                      <h5 style={{textAlign: "center"}}>Unit Images</h5>
-                      <div className="unit-images">
-                        {selectedProperty.CommApartments.AptUnits.Unit_Images.map((image) => (
-                          <img src={image} />
-                        ))}
-                      </div>
-                      <h5>Features:</h5>
-                      <ul>
-                        {selectedProperty.CommApartments.AptUnits.UnitFeatures.map((feature) => (
-                          <li>{feature}</li>
-                        ))}
-                      </ul>
-                      <h5>Unit Details:</h5>
-                      <p><strong>Bedrooms:</strong> {selectedProperty.CommApartments.AptUnits.Bedrooms}</p>
-                      <p><strong>Bathrooms:</strong> {selectedProperty.CommApartments.AptUnits.Bathrooms}</p>
-                      <p><strong>Unit SQFT:</strong> {selectedProperty.CommApartments.AptUnits.SQFT}</p>
-                      <Link to={selectedProperty.CommApartments.AptUnits.HomeTourLink}>{selectedProperty.CommApartments.AptUnits.HomeTourLink}</Link>
-                    </div>
-                  </div>
-                </>
-            </div>
-    );
+  const GetOwner = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:5000/ownerData/getAllOwnersData");
+      setOwners(data);
+    } catch (error) {
+      console.error("Error fetching community data:", error);
+    }
+  }
+  
+  useEffect(() => {
+    if (!owners) {
+      GetOwner();
+    } else {
+      const selectedOwner = owners.find(potentialOwner => potentialOwner.CommunityID === selectedProperty.CommunityID);
+      if (selectedOwner) {
+        setOwner(selectedOwner);
+        GetUnitOwner(selectedProperty.CommApartments.AptUnits.UnitNumber);
+      }
+    }
+  }, [owners, selectedProperty]);
+
+  const GetUnitOwner = (unitID) => {
+    const newUnitOwner = owners.find(potentialOwner => potentialOwner.UnitOwner.AptUnit.UnitID === unitID);
+    if (newUnitOwner) {
+      setUnitOwner(newUnitOwner);
+    }
+  }
+
+
+  return (
+    <div className="apartments-container">
+      <>
+        <h1 className="text-center">Apartments</h1>
+        <div className="apartment">
+          <h2>{selectedProperty.CommApartments.AptName}</h2>
+          {selectedProperty.CommApartments.AptUnits && (
+            <Unit
+              unitDetails={selectedProperty.CommApartments.AptUnits}
+              unitOwner={unitOwner}
+            />
+          )}
+        </div>
+      </>
+    </div>
+  );
 }
 
 export default Apartments;

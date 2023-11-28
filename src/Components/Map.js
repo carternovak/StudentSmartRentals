@@ -94,7 +94,7 @@ const Map = (props) => {
         yesIWantToUseGoogleMapApiInternals
         zoom={17}
         onGoogleApiLoaded={({map, maps}) => renderMarkers(map, maps)}
-        draggable={false}
+        
       >
         
       </GoogleMapReact>

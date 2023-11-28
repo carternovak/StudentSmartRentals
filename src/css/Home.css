@@ -48,3 +48,8 @@ body {
 .property_container>div {
     width: 60%;
 }
+
+#scroll {
+    text-decoration: none;
+    color: black;
+}

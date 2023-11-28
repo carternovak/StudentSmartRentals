@@ -39,13 +39,13 @@ const MaintenenceRequests = () => {
         // TODO: Update the community data to reflect the approved request
         const confirmApprove = await window.confirm("Are you sure you want to aprove this request?")
         if (confirmApprove) {
-            console.log("Approving ticket");
             const dataToBeSent = {
                 isResolved: true,
                 isApproved: true,
                 closedAt: new Date(),
             };
-            const response = await fetch(
+
+            await fetch(
                 "http://localhost:5000/maintenanceData/updateMaintenanceData/" + request.ticketID,
                 {
                     method: "PUT",
@@ -55,7 +55,7 @@ const MaintenenceRequests = () => {
                     body: JSON.stringify(dataToBeSent),
                 }
             );
-            const data = await response.json();
+
             fetchMaintenanceTickets();
         }
         return;
@@ -65,13 +65,13 @@ const MaintenenceRequests = () => {
         // TODO: Delete ticket from backend
         const confirmDelete = await window.confirm("Are you sure you want to deny this request?")
         if (confirmDelete) {
-            console.log("Denying ticket");
             const dataToBeSent = {
                 isResolved: true,
                 isApproved: false,
                 closedAt: new Date(),
             };
-            const response = await fetch(
+
+            await fetch(
                 "http://localhost:5000/maintenanceData/updateMaintenanceData/" + request.ticketID,
                 {
                     method: "PUT",
@@ -81,7 +81,7 @@ const MaintenenceRequests = () => {
                     body: JSON.stringify(dataToBeSent),
                 }
             );
-            const data = await response.json();
+    
             fetchMaintenanceTickets();
         }
         return;
@@ -107,8 +107,7 @@ const MaintenenceRequests = () => {
     const deleteRequest = async (request) => {
         const confirmDelete = await window.confirm("Are you sure you want to delete this request?")
         if (confirmDelete) {
-            console.log("Deleting ticket");
-            const response = await fetch(
+            await fetch(
                 "http://localhost:5000/maintenanceData/deleteMaintenanceData/" + request.ticketID,
                 {
                     method: "DELETE",
@@ -117,7 +116,7 @@ const MaintenenceRequests = () => {
                     },
                 }
             );
-            const data = await response.json();
+
             fetchMaintenanceTickets();
         }
         return;
@@ -126,13 +125,13 @@ const MaintenenceRequests = () => {
     const reopenRequest = async (request) => {
         const confirmReopen = await window.confirm("Are you sure you want to reopen this request?")
         if (confirmReopen) {
-            console.log("Reopening ticket");
             const dataToBeSent = {
                 isResolved: false,
                 isApproved: false,
                 closedAt: undefined,
             };
-            const response = await fetch(
+
+            await fetch(
                 "http://localhost:5000/maintenanceData/updateMaintenanceData/" + request.ticketID,
                 {
                     method: "PUT",
@@ -142,7 +141,7 @@ const MaintenenceRequests = () => {
                     body: JSON.stringify(dataToBeSent),
                 }
             );
-            const data = await response.json();
+
             fetchMaintenanceTickets();
         }
         return;
@@ -153,7 +152,7 @@ const MaintenenceRequests = () => {
         setSearchQuery(event.target.value);
     }
     function handleKeyPress() {
-        if (searchResults.length > 0) searchResults = filterTickets();
+        if (searchResults.length > 0) setSearchResults(filterTickets());
     }
 
     function filterTickets() {

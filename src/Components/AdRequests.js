@@ -30,7 +30,6 @@ const AdRequests = () => {
         // TODO: Update the community data to reflect the approved request
         const confirmApprove = await window.confirm("Are you sure you want to aprove this request?")
         if (confirmApprove) {
-            console.log("Approving ad");
             const dataToBeSent = {
                 isResolved: true,
                 isApproved: true,
@@ -56,7 +55,6 @@ const AdRequests = () => {
         // TODO: Delete ticket from backend
         const confirmDelete = await window.confirm("Are you sure you want to deny this request?")
         if (confirmDelete) {
-            console.log("Denying ad");
             const dataToBeSent = {
                 isResolved: true,
                 isApproved: true,
