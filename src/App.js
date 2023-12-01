@@ -11,7 +11,7 @@ import PasswordReset from "./Components/PasswordReset";
 import SellForm from "./Components/SellForm";
 import Chat from "./Components/Chat";
 import PhoneRegistration from "./Components/PhoneRegistration";
-import UserProfilePage from "./Components/Users/UserProfile";
+import UserProfile from "./Components/Users/UserProfile";
 import AdminDashboard from "./Components/AdminDashboard";
 
 function App() {
@@ -70,7 +70,7 @@ function App() {
                 path="/profile"
                 element={
                   <ProtectedRoute>
-                    <UserProfilePage />
+                    <UserProfile />
                   </ProtectedRoute>
                 }
               />
