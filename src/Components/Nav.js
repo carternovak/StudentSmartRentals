@@ -67,13 +67,8 @@ function Nav() {
               </Link>
             )}
             {userRole !== "" && (
-              <Link to="/iub-support">
-                <li>IUB Support</li>
-              </Link>
-            )}
-            {userRole === "admin" && (
-              <Link to="/admin">
-                <li>Admin</li>
+              <Link to="/chat">
+                <li>Chat</li>
               </Link>
             )}
           </ul>
@@ -82,7 +77,7 @@ function Nav() {
           <Link to="/">
             <img
               src={Logo}
-              style={{ width: "350px", height: "55px" }}
+              style={{ maxWidth: "100%" }}
               alt="StudentSmart Rentals Logo"
             />
           </Link>
@@ -90,18 +85,13 @@ function Nav() {
         <div className="link-container">
           <ul className="nav-links2">
             {userRole !== "" && (
-              <Link to="/help">
-                <li>Help</li>
-              </Link>
-            )}
-            {userRole !== "" && (
-              <Link to="/chat">
-                <li>Chat</li>
-              </Link>
-            )}
-            {userRole !== "" && (
               <Link to="/profile">
                 <li>Profile</li>
+              </Link>
+            )}
+            {userRole === "admin" && (
+              <Link to="/admin">
+                <li>Admin</li>
               </Link>
             )}
             {userRole === "" ? (

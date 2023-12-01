@@ -138,7 +138,7 @@ const Home = (props) => {
             </div>
             <div className={`box text-center property_container ${selectedProperty ? "selected-container" : ""}`}>
               {!selectedProperty && ( // Conditionally render the search when no property is selected
-                <div style={{ margin: "60px 0 100px 0", width: "20%" }}>
+                <div style={{ margin: "60px auto 100px auto", width: "100%" }}>
                   <Search
                     id="search"
                     searchQuery={searchQuery}

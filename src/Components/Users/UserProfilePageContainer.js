@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 export const UserProfilePageContainer = styled.div`
   position: relative;
-  top: 2%; /* Adjust this value to set the desired margin from the top */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -16,14 +15,19 @@ export const UserProfileNavigationBar = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 10px;
+  width: 500px;
   background-color: #ffffff;
   padding: 20px;
   border-bottom: 1px solid #ccc;
 `;
 export const UserProfileNavigationLink = styled(Link)`
   text-decoration: none;
+  text-align: center;
   color: #333;
   margin: 0 20px;
+  padding: 10px;
+  width: 33%;
   font-size: 18px;
   &:hover {
     color: #ff0000;

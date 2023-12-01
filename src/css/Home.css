@@ -49,7 +49,27 @@ body {
     width: 60%;
 }
 
+.property_container>div>form {
+    width: 80% !important;
+    margin: 0 auto;
+}
+
 #scroll {
     text-decoration: none;
     color: black;
+}
+
+@media (max-width: 800px) {
+
+    .property_container>div {
+        width: 80%;
+    }
+
+    .details-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    
+
 }
