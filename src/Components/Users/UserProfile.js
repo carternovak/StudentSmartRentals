@@ -92,8 +92,7 @@ const UserProfilePage = () => {
       }
       try {
         const { data } = await axios.get(
-          "http://localhost:5000/communityData/getAllCommunityData/" +
-          userData.CommunityID
+          "http://localhost:5000/communityData/getAllCommunityData/" + userData.CommunityID
         );
         // Handle the data received from the API
         console.log(data);
