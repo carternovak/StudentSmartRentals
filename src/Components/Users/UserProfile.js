@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 import axios from "axios";
 import Nav from "../Nav";
 import "../../css/Home.css";
@@ -137,6 +138,9 @@ const UserProfilePage = () => {
 
   return (
     <div className="home_container">
+      <Helmet>
+            <title>User Profile | StudentSmart Rentals</title>
+      </Helmet>
       <Nav />
 
       <UserProfilePageContainer>

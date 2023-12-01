@@ -1,5 +1,5 @@
-import async from "hbs/lib/async";
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
 
@@ -162,6 +162,9 @@ function SellForm() {
   // Backend intgration ends here
   return (
     <div style={{ display: "block", width: 700, padding: 30 }}>
+      <Helmet>
+        <title>Sell Form | StudentSmart Rentals</title>
+      </Helmet>
       <h4>Seller Form</h4>
       <Form onSubmit={handleSubmit}>
         <Form.Group>
