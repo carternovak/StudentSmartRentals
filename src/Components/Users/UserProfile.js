@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 import axios from "axios";
 import Nav from "../Nav";
 import "../../css/Home.css";
@@ -91,8 +92,7 @@ const UserProfilePage = () => {
       }
       try {
         const { data } = await axios.get(
-          "http://localhost:5000/communityData/getAllCommunityData/" +
-            userData.CommunityID
+          "http://localhost:5000/communityData/getAllCommunityData/" + userData.CommunityID
         );
         // Handle the data received from the API
         console.log(data);
@@ -137,6 +137,9 @@ const UserProfilePage = () => {
 
   return (
     <div className="home_container">
+      <Helmet>
+            <title>User Profile | StudentSmart Rentals</title>
+      </Helmet>
       <Nav />
 
       <UserProfilePageContainer>
@@ -171,9 +174,13 @@ const UserProfilePage = () => {
               <UserProfileInfoContainer>
                 <UserProfileInfoLabel>Address:</UserProfileInfoLabel>
                 <UserProfileInfoValue>
-                  {userPropertyDetails.CommStAddress} ,{" "}
-                  {userPropertyDetails.CommCity}, {userPropertyDetails.State},{" "}
-                  {userPropertyDetails.Zipcode}{" "}
+                  {userPropertyDetails && (
+                    <>
+                      {userPropertyDetails.CommStAddress} ,{" "}
+                      {userPropertyDetails.CommCity}, {userPropertyDetails.State},{" "}
+                      {userPropertyDetails.Zipcode}{" "}
+                    </>
+                  )}
                 </UserProfileInfoValue>
               </UserProfileInfoContainer>
               <UserProfileInfoContainer>
@@ -191,7 +198,7 @@ const UserProfilePage = () => {
               <UserProfileInfoContainer>
                 <UserProfileInfoLabel>Rent:</UserProfileInfoLabel>
                 <UserProfileInfoValue>
-                  {userPropertyDetails.CommApartments.AptUnits.UnitPrice}
+                  {userPropertyDetails && (userPropertyDetails.CommApartments.AptUnits.UnitPrice)}
                 </UserProfileInfoValue>
               </UserProfileInfoContainer>
               <UserProfileInfoContainer>

@@ -115,3 +115,46 @@ h3 {
 .request-header p {
     font-style: italic;
 }
+
+
+@media (max-width: 800px) {
+    .admin-container {
+        width: 100%;
+    }
+    
+    .admin-container>h1 {
+        padding: 0 30px;
+    }
+
+    .admin-content {
+        width: 100%;
+    }
+
+    .approved-text {
+        margin-bottom: 20px;
+    }
+
+    .button-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    #description {
+        width: 40% !important;
+        align-self: flex-start;
+        margin-bottom: 20px !important;
+    }
+
+    .denied-text {
+        margin-bottom: 20px;
+    }
+
+    .maintenence-request {
+        width: 100%;
+    }
+
+    .requests {
+        width: 90%;
+    }
+}

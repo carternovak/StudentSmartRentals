@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router";
 import "../css/AdminDashboard.css";
 import { useUserAuth } from "../context/UserAuthContext";
@@ -38,6 +39,9 @@ const AdminDashboard = () => {
     return (
         <>
             <Nav />
+            <Helmet>
+            <title>Admin Dashboard | StudentSmart Rentals</title>
+            </Helmet>
             <div className="admin-container">
                 <h1>Admin Dashboard</h1>
                 <div className="admin-content">
