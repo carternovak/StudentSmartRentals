@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import Nav from "./Nav";
 
 function SellForm() {
   const navigate = useNavigate();
@@ -161,24 +162,17 @@ function SellForm() {
 
   // Backend intgration ends here
   return (
-    <div style={{ display: "block", width: 700, padding: 30 }}>
+    <div>
+      <Nav />
+    <div style={{ display: "block", width: 700, padding: 30, marginLeft: "auto", marginRight: "auto"}}>
       <Helmet>
         <title>Sell Form | StudentSmart Rentals</title>
       </Helmet>
-      <h4>Seller Form</h4>
+      <h4 style={{textAlign: "center"}}>Seller Form</h4><br></br>
+      <h5>Personal Information:</h5>
       <Form onSubmit={handleSubmit}>
         <Form.Group>
-          <Form.Label>Enter street address:</Form.Label>
-          <Form.Control
-            type="text"
-            name="streetAddress"
-            placeholder="Enter your street address"
-            value={formData.streetAddress}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Enter your full name:</Form.Label>
+          <Form.Label>Full name:</Form.Label>
           <Form.Control
             type="text"
             name="fullName"
@@ -189,9 +183,9 @@ function SellForm() {
           {errors.fullName && (
             <div className="text-danger">{errors.fullName}</div>
           )}
-        </Form.Group>
+        </Form.Group><br></br>
         <Form.Group>
-          <Form.Label>Enter your email address:</Form.Label>
+          <Form.Label>Email address:</Form.Label>
           <Form.Control
             type="email"
             name="email"
@@ -200,9 +194,22 @@ function SellForm() {
             onChange={handleInputChange}
           />
           {errors.email && <div className="text-danger">{errors.email}</div>}
-        </Form.Group>
+        </Form.Group><br></br>
         <Form.Group>
-          <Form.Label>Enter your age:</Form.Label>
+          <Form.Label>Contact number:</Form.Label>
+          <Form.Control
+            type="number"
+            name="contactNumber"
+            placeholder="Enter contact number"
+            value={formData.contactNumber}
+            onChange={handleInputChange}
+          />
+          {errors.contactNumber && (
+            <div className="text-danger">{errors.contactNumber}</div>
+          )}
+        </Form.Group><br></br>
+        <Form.Group>
+          <Form.Label>Age:</Form.Label>
           <Form.Control
             type="number"
             name="age"
@@ -211,9 +218,10 @@ function SellForm() {
             onChange={handleInputChange}
           />
           {errors.age && <div className="text-danger">{errors.age}</div>}
-        </Form.Group>
+        </Form.Group><br></br><br></br>
+        <h5>Rental Information:</h5>
         <Form.Group>
-          <Form.Label>Enter street address:</Form.Label>
+          <Form.Label>Street address:</Form.Label>
           <Form.Control
             type="text"
             name="street"
@@ -222,9 +230,9 @@ function SellForm() {
             onChange={handleInputChange}
           />
           {errors.street && <div className="text-danger">{errors.street}</div>}
-        </Form.Group>
+        </Form.Group><br></br>
         <Form.Group>
-          <Form.Label>Enter home type:</Form.Label>
+          <Form.Label>Home type:</Form.Label>
           <Form.Control
             type="text"
             name="homeType"
@@ -235,31 +243,31 @@ function SellForm() {
           {errors.homeType && (
             <div className="text-danger">{errors.homeType}</div>
           )}
-        </Form.Group>
+        </Form.Group><br></br>
         <Form.Group>
-          <Form.Label>Enter beds:</Form.Label>
+          <Form.Label>Beds:</Form.Label>
           <Form.Control
             type="number"
             name="beds"
-            placeholder="Enter beds"
+            placeholder="Enter number of beds"
             value={formData.beds}
             onChange={handleInputChange}
           />
           {errors.beds && <div className="text-danger">{errors.beds}</div>}
-        </Form.Group>
+        </Form.Group><br></br>
         <Form.Group>
-          <Form.Label>Enter bath:</Form.Label>
+          <Form.Label>Baths:</Form.Label>
           <Form.Control
             type="number"
             name="bath"
-            placeholder="Enter bath"
+            placeholder="Enter number of baths"
             value={formData.bath}
             onChange={handleInputChange}
           />
           {errors.bath && <div className="text-danger">{errors.bath}</div>}
-        </Form.Group>
+        </Form.Group><br></br>
         <Form.Group>
-          <Form.Label>Enter area:</Form.Label>
+          <Form.Label>Area (SQFT):</Form.Label>
           <Form.Control
             type="number"
             name="area"
@@ -268,9 +276,9 @@ function SellForm() {
             onChange={handleInputChange}
           />
           {errors.area && <div className="text-danger">{errors.area}</div>}
-        </Form.Group>
+        </Form.Group><br></br>
         <Form.Group>
-          <Form.Label>Enter land area:</Form.Label>
+          <Form.Label>Land area:</Form.Label>
           <Form.Control
             type="number"
             name="landArea"
@@ -281,7 +289,7 @@ function SellForm() {
           {errors.landArea && (
             <div className="text-danger">{errors.landArea}</div>
           )}
-        </Form.Group>
+        </Form.Group><br></br>
         <Form.Group>
           <Form.Label>Apartment Condition:</Form.Label>
           <Form.Select
@@ -298,7 +306,7 @@ function SellForm() {
           {errors.apartmentCondition && (
             <div className="text-danger">{errors.apartmentCondition}</div>
           )}
-        </Form.Group>
+        </Form.Group><br></br>
         <Form.Group>
           <Form.Label>Home tour link:</Form.Label>
           <Form.Control
@@ -312,27 +320,17 @@ function SellForm() {
             <div className="text-danger">{errors.homeTourLink}</div>
           )}
         </Form.Group>
-        <Form.Group>
-          <Form.Label>Enter your contact number:</Form.Label>
-          <Form.Control
-            type="number"
-            name="contactNumber"
-            placeholder="Enter contact number"
-            value={formData.contactNumber}
-            onChange={handleInputChange}
-          />
-          {errors.contactNumber && (
-            <div className="text-danger">{errors.contactNumber}</div>
-          )}
-        </Form.Group>
-
-        <Button variant="primary" type="submit" onClick={submitFormData}>
-          Click here to submit form
-        </Button>
-        <Button variant="danger" type="button" onClick={returnToHomePage}>
-          Cancel
-        </Button>
+        <br></br>
+        <div style={{textAlign: "center"}}>
+          <Button variant="primary" type="submit" onClick={submitFormData} style={{marginRight: 20}}>
+            Click here to submit form
+          </Button>
+          <Button variant="danger" type="button" onClick={returnToHomePage}>
+            Cancel
+          </Button>
+        </div>
       </Form>
+      </div>
     </div>
   );
 }
