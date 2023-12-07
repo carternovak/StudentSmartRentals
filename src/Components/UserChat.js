@@ -51,7 +51,7 @@ const Chat = () => {
             <div className="chat-box">
                 <h1> {data.user?.displayName ? data.user.displayName : data.user.email}</h1>
                 <div className="chat">
-                    {data.user.email !== undefined && <ChatMessages/> ? <ChatMessages/> : <div className="no-chat-selected">Select a chat to start messaging</div>}
+                    {data.user.email !== undefined && <ChatMessages/> ? <ChatMessages/> : <div className="no-chat-selected"><h2 style={{textAlign:"center"}}>Select a chat to start messaging</h2></div>}
                     <span id="scroll-spot" ref={dummy}></span>
                 </div>
                 <div className="chat-input-box">

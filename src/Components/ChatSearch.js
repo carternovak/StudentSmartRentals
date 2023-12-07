@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { collection, query, where, getDocs, setDoc, doc, updateDoc, serverTimestamp, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useUserAuth } from "../context/UserAuthContext";
@@ -6,118 +6,120 @@ import DefaultIcon from "../images/DefaultUser.svg";
 import SearchIcon from "../images/SearchIcon.svg";
 
 const ChatSearch = () => {
-    const[err, setErr] = useState(false);
-    const[searchedUser, setSearchedUser] = useState(null);
-    const[email, setEmail] = useState("");
+    const [err, setErr] = useState(false);
+    const [searchedUsers, setSearchedUsers] = useState([]);
+    const [email, setEmail] = useState("");
     const { user } = useUserAuth();
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (email.length > 0) {
+                handleSearch();
+            } else {
+                setSearchedUsers([]);
+            }
+        }, 300); // Adjust the debounce time as needed
+
+        return () => clearTimeout(timer);
+    }, [email]); // Run the effect when the email changes
+
     const handleSearch = async () => {
-        var foundUser = false;
+        const users = [];
         const q = query(
             collection(db, "users"),
-            where("email", "==", email)
-          );
+            where("email", ">=", email.toLowerCase()),
+            where("email", "<=", email.toLowerCase() + "\uf8ff")
+        );
+
         try {
-            
             const querySnapshot = await getDocs(q);
 
-            querySnapshot.forEach((doc) => { 
+            querySnapshot.forEach((doc) => {
                 console.log("Doc: ", doc.data());
-                foundUser = true;
-                setErr(false);
-                setSearchedUser(doc.data());
+                users.push(doc.data());
             });
 
-        } catch(err) {
+            setSearchedUsers(users);
+            setErr(users.length === 0);
+        } catch (err) {
             setErr(true);
-            console.log("Is erroring: ", err);
             console.error(err);
-        }
-        if(!foundUser) {
-            setErr(true);
-            setSearchedUser(null);
         }
     };
 
-    const handleSelect = async () => {
-        
-        const combinedId = user.uid > searchedUser.uid ? user.uid + searchedUser.uid : searchedUser.uid + user.uid;
+    const handleSelect = async (selectedUser) => {
+        const combinedId = user.uid > selectedUser.uid ? user.uid + selectedUser.uid : selectedUser.uid + user.uid;
+
         try {
             const response = await getDoc(doc(db, "chats", combinedId));
-            if(!response.exists()) {
+            if (!response.exists()) {
                 await setDoc(doc(db, "chats", combinedId), { messages: [] });
-
 
                 await updateDoc(doc(db, "userChats", user.uid), {
                     [combinedId + ".userInfo"]: {
-                        uid: searchedUser.uid,
-                        email: searchedUser.email,
-                        displayName: searchedUser.displayName? searchedUser.displayName : "",
+                        uid: selectedUser.uid,
+                        email: selectedUser.email,
+                        displayName: selectedUser.displayName ? selectedUser.displayName : "",
                     },
                     [combinedId + ".date"]: serverTimestamp(),
                 });
 
-                await updateDoc(doc(db, "userChats", searchedUser.uid), {
+                await updateDoc(doc(db, "userChats", selectedUser.uid), {
                     [combinedId + ".userInfo"]: {
                         uid: user.uid,
                         email: user.email,
-                        displayName: user.displayName? user.displayName : "",
+                        displayName: user.displayName ? user.displayName : "",
                     },
                     [combinedId + ".date"]: serverTimestamp(),
                 });
-
             }
-
-        } catch(err) {
+        } catch (err) {
             setErr(true);
             console.log(err);
         }
-        
-        setSearchedUser(null);
+
+        setSearchedUsers([]);
         setEmail("");
     };
-
-    const handleKeyPress = (e) => {
-        setErr(false);
-        e.code === "Enter" && handleSearch();
-      };
 
     return (
         <div className="search">
             <div className="search-input">
-                <input 
-                type="text" 
-                placeholder="Search for a user" 
-                onKeyDown={handleKeyPress}
-                onChange={(e) => setEmail(e.target.value)} 
-                value={email}
-                id="form1"
-                className="form-control"
+                <input
+                    type="text"
+                    placeholder="Search for a user by email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    id="form1"
+                    className="form-control"
                 />
-                <button type="button" onClick={handleSearch} class="btn btn-primary search-button">
+                <button type="button" onClick={handleSearch} className="btn btn-primary search-button">
                     <img src={SearchIcon} alt="" />
                 </button>
             </div>
-            {err && (
-                <div className="chat-users selected-chat">
-                    <div className="user-chat" >
-                        <img src={DefaultIcon} alt={"Invalid User"} />
-                        <div className="details">
-                            <span>User not found</span>
+            <div className={`search-results ${searchedUsers.length > 0 ? 'active' : ''}`}>
+                {err && (
+                    <div className="chat-users searched-chat">
+                        <div className="user-chat">
+                            <img src={DefaultIcon} alt={"Invalid User"} />
+                            <div className="details">
+                                <span>No users found</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-            {searchedUser && (
-                <div className="chat-users selected-chat">
-                    <div className="user-chat" onClick={handleSelect}>
-                        <img src={searchedUser.imgUrl ? searchedUser.imgUrl : DefaultIcon} alt={searchedUser.email} />
-                        <div className="details">
-                            <span>{searchedUser.email}</span>
+                )}
+                {searchedUsers.map((chatUser) => (
+                    chatUser.email !== user.email &&
+                    (<div key={chatUser.uid} className="chat-users searched-chat">
+                        <div className="user-chat" onClick={() => handleSelect(chatUser)}>
+                            <img src={chatUser.imgUrl ? chatUser.imgUrl : DefaultIcon} alt={chatUser.email} />
+                            <div className="details">
+                                <span>{chatUser.email}</span>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            )}
+                    </div>)
+                ))}
+            </div>
         </div>
     );
 };
